@@ -11,7 +11,7 @@ export class SignUpController {
         body: {}
       }
     }
-    const requiredFields = ['name', 'email']
+    const requiredFields = ['name', 'email', 'password']
     if (!thisResponse.filled) {
       for (const field of requiredFields) {
         if (!httpRequest.body[field]) {

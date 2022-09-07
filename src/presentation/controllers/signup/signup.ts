@@ -51,11 +51,15 @@ export class SignUpController implements Controller {
       }
 
       if (!thisResponse.filled) {
-        this.addAccount.add({
+        const account = this.addAccount.add({
           name,
           email,
           password
         })
+
+        thisResponse.data.statusCode = 200
+        thisResponse.data.body = account
+        thisResponse.filled = true
       }
     } catch (error) {
       thisResponse.filled = true

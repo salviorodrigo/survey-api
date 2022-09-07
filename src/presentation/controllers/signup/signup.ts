@@ -11,7 +11,7 @@ export class SignUpController implements Controller {
     this.addAccount = addAccount
   }
 
-  handle (httpRequest: HttpRequest): HttpResponse {
+  async handle (httpRequest: HttpRequest): Promise<HttpResponse> {
     const thisResponse = {
       filled: false,
       data: {
@@ -51,7 +51,7 @@ export class SignUpController implements Controller {
       }
 
       if (!thisResponse.filled) {
-        const account = this.addAccount.add({
+        const account = await this.addAccount.add({
           name,
           email,
           password

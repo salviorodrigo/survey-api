@@ -4,6 +4,7 @@ import { MissingParamError } from './../erros/missing-param-error'
 import { Controller } from '../protocols/controllers'
 import { EmailValidator } from '../protocols/email-validator'
 import { InvalidParamError } from './../erros/invalid-param-error'
+import { ServerError } from '../erros/server-error'
 
 export class SignUpController implements Controller {
   private readonly emailValidator: EmailValidator
@@ -20,23 +21,30 @@ export class SignUpController implements Controller {
         body: {}
       }
     }
-    const requiredFields = ['name', 'email', 'password', 'passwordConfirmation']
-    if (!thisResponse.filled) {
-      for (const field of requiredFields) {
-        if (!httpRequest.body[field]) {
-          thisResponse.data = badRequest(new MissingParamError(field))
-          thisResponse.filled = true
-          break
+
+    try {
+      const requiredFields = ['name', 'email', 'password', 'passwordConfirmation']
+      if (!thisResponse.filled) {
+        for (const field of requiredFields) {
+          if (!httpRequest.body[field]) {
+            thisResponse.data = badRequest(new MissingParamError(field))
+            thisResponse.filled = true
+            break
+          }
         }
       }
-    }
 
-    if (!thisResponse.filled) {
-      const isAnValidEmail = this.emailValidator.isValid(httpRequest.body.email)
-      if (!isAnValidEmail) {
-        thisResponse.data = badRequest(new InvalidParamError('email'))
-        thisResponse.filled = true
+      if (!thisResponse.filled) {
+        const isAnValidEmail = this.emailValidator.isValid(httpRequest.body.email)
+        if (!isAnValidEmail) {
+          thisResponse.data = badRequest(new InvalidParamError('email'))
+          thisResponse.filled = true
+        }
       }
+    } catch (error) {
+      thisResponse.filled = false
+      thisResponse.data.statusCode = 500
+      thisResponse.data.body = new ServerError()
     }
 
     return thisResponse.data

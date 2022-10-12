@@ -1,0 +1,11 @@
+# Execute with extensindo REST Client (Huachao Mao) for Visual Studio Code 
+
+POST http://localhost:5050/api/signup HTTP/1.1
+content-type: application/json
+
+{
+    "name": "Jhon Doe",
+    "email": "jhon.doe@mail.com",
+    "password": "safepassword",
+    "passwordConfirmation": "safepassword"
+}

@@ -2,11 +2,7 @@ import { Controller, HttpRequest, HttpResponse } from '../../presentation/protoc
 import { LogControllerDecorator } from './log'
 
 describe('LogController Decorator', () => {
-  interface SutTypes {
-    sut: LogControllerDecorator
-    controllerStub: Controller
-  }
-  const makeSut = (): SutTypes => {
+  const makeControllerStub = (): Controller => {
     class ControllerStub implements Controller {
       async handle (httpRequest: HttpRequest): Promise<HttpResponse> {
         const httpResponse = {
@@ -18,8 +14,17 @@ describe('LogController Decorator', () => {
         return await new Promise(resolve => resolve(httpResponse))
       }
     }
-
     const controllerStub = new ControllerStub()
+    return controllerStub
+  }
+
+  interface SutTypes {
+    sut: LogControllerDecorator
+    controllerStub: Controller
+  }
+
+  const makeSut = (): SutTypes => {
+    const controllerStub = makeControllerStub()
     const sut = new LogControllerDecorator(controllerStub)
 
     return {

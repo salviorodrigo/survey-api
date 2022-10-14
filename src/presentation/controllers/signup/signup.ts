@@ -61,9 +61,8 @@ export class SignUpController implements Controller {
         thisResponse.filled = true
       }
     } catch (error) {
-      console.error(error)
       thisResponse.filled = true
-      thisResponse.data = serverError()
+      thisResponse.data = serverError(error)
     }
 
     return thisResponse.data

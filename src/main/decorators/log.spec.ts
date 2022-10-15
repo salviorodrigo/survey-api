@@ -3,51 +3,51 @@ import { LogControllerDecorator } from './log'
 import { serverError } from '../../presentation/controllers/helpers/http-helper'
 import { LogErrorRepository } from '../../data/protocols/log-error-repository'
 
-describe('LogController Decorator', () => {
-  const makeLogErrorRepositoryStub = (): LogErrorRepository => {
-    class LogErrorRepositoryStub implements LogErrorRepository {
-      async log (stack: string): Promise<void> {
-        return await new Promise(resolve => resolve())
-      }
+const makeLogErrorRepositoryStub = (): LogErrorRepository => {
+  class LogErrorRepositoryStub implements LogErrorRepository {
+    async log (stack: string): Promise<void> {
+      return await new Promise(resolve => resolve())
     }
-    const logErrorRepositoryStub = new LogErrorRepositoryStub()
-    return logErrorRepositoryStub
   }
+  const logErrorRepositoryStub = new LogErrorRepositoryStub()
+  return logErrorRepositoryStub
+}
 
-  const makeControllerStub = (): Controller => {
-    class ControllerStub implements Controller {
-      async handle (httpRequest: HttpRequest): Promise<HttpResponse> {
-        const httpResponse = {
-          statusCode: 200,
-          body: {
-            any_value: 'any_value'
-          }
+const makeControllerStub = (): Controller => {
+  class ControllerStub implements Controller {
+    async handle (httpRequest: HttpRequest): Promise<HttpResponse> {
+      const httpResponse = {
+        statusCode: 200,
+        body: {
+          any_value: 'any_value'
         }
-        return await new Promise(resolve => resolve(httpResponse))
       }
-    }
-    const controllerStub = new ControllerStub()
-    return controllerStub
-  }
-
-  interface SutTypes {
-    sut: LogControllerDecorator
-    controllerStub: Controller
-    logErrorRepositoryStub: LogErrorRepository
-  }
-
-  const makeSut = (): SutTypes => {
-    const controllerStub = makeControllerStub()
-    const logErrorRepositoryStub = makeLogErrorRepositoryStub()
-    const sut = new LogControllerDecorator(controllerStub, logErrorRepositoryStub)
-
-    return {
-      sut,
-      controllerStub,
-      logErrorRepositoryStub
+      return await new Promise(resolve => resolve(httpResponse))
     }
   }
+  const controllerStub = new ControllerStub()
+  return controllerStub
+}
 
+interface SutTypes {
+  sut: LogControllerDecorator
+  controllerStub: Controller
+  logErrorRepositoryStub: LogErrorRepository
+}
+
+const makeSut = (): SutTypes => {
+  const controllerStub = makeControllerStub()
+  const logErrorRepositoryStub = makeLogErrorRepositoryStub()
+  const sut = new LogControllerDecorator(controllerStub, logErrorRepositoryStub)
+
+  return {
+    sut,
+    controllerStub,
+    logErrorRepositoryStub
+  }
+}
+
+describe('LogController Decorator', () => {
   test('Should call controller handler', async () => {
     const { sut, controllerStub } = makeSut()
     const handleSpy = jest.spyOn(controllerStub, 'handle')

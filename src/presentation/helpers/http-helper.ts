@@ -3,12 +3,16 @@ import { ServerError } from '../errors'
 
 export const badRequest = (error: Error): HttpResponse => ({
   statusCode: 400,
-  body: error
+  body: {
+    error: error.message
+  }
 })
 
 export const serverError = (error: Error): HttpResponse => ({
   statusCode: 500,
-  body: new ServerError(error.stack)
+  body: {
+    error: new ServerError(error.stack).message
+  }
 })
 
 export const ok = (data: any): HttpResponse => ({

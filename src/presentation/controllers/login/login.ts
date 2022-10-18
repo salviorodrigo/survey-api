@@ -18,22 +18,22 @@ export class LoginController implements Controller {
       }
     }
 
+    const requiredFields = ['email', 'password']
     if (!thisResponse.filled) {
-      if (!httpRequest.body.email) {
-        thisResponse.filled = true
-        thisResponse.data = badRequest(new MissingParamError('email'))
+      for (const field of requiredFields) {
+        if (!httpRequest.body[field]) {
+          thisResponse.data = badRequest(new MissingParamError(field))
+          thisResponse.filled = true
+          break
+        }
       }
     }
 
-    if (!thisResponse.filled) {
-      if (!httpRequest.body.password) {
-        thisResponse.filled = true
-        thisResponse.data = badRequest(new MissingParamError('password'))
-      }
-    }
+    const { email } = httpRequest.body
 
     if (!thisResponse.filled) {
-      if (!this.emailValidator.isValid(httpRequest.body.email)) {
+      const isValidEmail = this.emailValidator.isValid(email)
+      if (!isValidEmail) {
         thisResponse.filled = true
         thisResponse.data = badRequest(new InvalidParamError('email'))
       }

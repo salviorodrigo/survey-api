@@ -23,7 +23,14 @@ export class SignUpController implements Controller {
     }
 
     try {
-      this.validator.validate(httpRequest.body)
+      if (!thisResponse.filled) {
+        const validatorErrorBag = this.validator.validate(httpRequest.body)
+        if (validatorErrorBag) {
+          thisResponse.data = badRequest(validatorErrorBag)
+          thisResponse.filled = true
+        }
+      }
+
       const requiredFields = ['name', 'email', 'password', 'passwordConfirmation']
       if (!thisResponse.filled) {
         for (const field of requiredFields) {

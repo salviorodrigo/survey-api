@@ -30,7 +30,10 @@ export class LoginController implements Controller {
       const { email, password } = httpRequest.body
 
       if (!thisResponse.filled) {
-        const accessToken = await this.authenticator.auth(email, password)
+        const accessToken = await this.authenticator.auth({
+          email,
+          password
+        })
         thisResponse.filled = true
 
         if (!accessToken) {

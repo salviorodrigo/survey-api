@@ -1,5 +1,5 @@
 import { badRequest, serverError, unauthorized, ok } from '../../helpers/http/http-helper'
-import { HttpRequest, Authenticator, Validator } from './login-protocols'
+import { HttpRequest, Authenticator, Validator, AuthenticationModel } from './login-protocols'
 import { LoginController } from './login'
 import { MissingParamError } from '../../errors'
 
@@ -21,7 +21,7 @@ const makeValidatorStub = (): Validator => {
 
 const makeAuthenticatorStub = (): Authenticator => {
   class AuthenticatorStub implements Authenticator {
-    async auth (email: string, password: string): Promise<string> {
+    async auth (credentials: AuthenticationModel): Promise<string> {
       return 'any_token'
     }
   }
@@ -54,7 +54,10 @@ describe('Login Controller', () => {
     const httpRequest: HttpRequest = makeFakeRequest()
 
     await sut.handle(httpRequest)
-    expect(authSpy).toHaveBeenCalledWith(httpRequest.body.email, httpRequest.body.password)
+    expect(authSpy).toHaveBeenCalledWith({
+      email: httpRequest.body.email,
+      password: httpRequest.body.password
+    })
   })
 
   test('Should return 401 if invalid credentials provided', async () => {
@@ -70,7 +73,7 @@ describe('Login Controller', () => {
   test('Should return 500 if authenticator throws', async () => {
     const { sut, authenticatorStub } = makeSut()
 
-    jest.spyOn(authenticatorStub, 'auth').mockImplementationOnce((email: string) => {
+    jest.spyOn(authenticatorStub, 'auth').mockImplementationOnce(() => {
       throw new Error()
     })
     const httpRequest: HttpRequest = makeFakeRequest()

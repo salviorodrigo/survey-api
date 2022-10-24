@@ -2,7 +2,7 @@ import { describe, expect, test } from '@jest/globals'
 import { SignUpController } from './signup'
 import { MissingParamError } from '../../errors'
 import { AddAccount, AddAccountModel, AccountModel, Validator, HttpRequest } from './signup-protocols'
-import { ok, badRequest, serverError } from '../../helpers/http-helper'
+import { ok, badRequest, serverError } from '../../helpers/http/http-helper'
 
 const makeFakeRequest = (): HttpRequest => ({
   body: {

@@ -1,4 +1,4 @@
-import { MissingParamError } from './../../errors/missing-param-error'
+import { MissingParamError } from '../../errors/missing-param-error'
 import { Validator } from './validator'
 import { ValidatorComposite } from './validator-composite'
 

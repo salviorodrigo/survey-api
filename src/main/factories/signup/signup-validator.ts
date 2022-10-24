@@ -1,9 +1,9 @@
-import { ValidatorComposite } from './../../../presentation/helpers/validators/validator-composite'
-import { RequiredFieldValidator } from './../../../presentation/helpers/validators/required-field-validator'
-import { Validator } from './../../../presentation/helpers/validators/validator'
-import { CompareFieldValidator } from './../../../presentation/helpers/validators/compare-field-validator'
-import { EmailValidator } from './../../../presentation/helpers/validators/email-validator'
-import { EmailValidatorAdapter } from './../../../utils/email-validator-adapter'
+import { ValidatorComposite } from '../../../presentation/helpers/validators/validator-composite'
+import { RequiredFieldValidator } from '../../../presentation/helpers/validators/required-field-validator'
+import { Validator } from '../../../presentation/helpers/validators/validator'
+import { CompareFieldValidator } from '../../../presentation/helpers/validators/compare-field-validator'
+import { EmailValidator } from '../../../presentation/helpers/validators/email-validator'
+import { EmailValidatorAdapter } from '../../../utils/email-validator-adapter'
 
 export const makeSignUpValidator = (): ValidatorComposite => {
   const validators: Validator[] = []

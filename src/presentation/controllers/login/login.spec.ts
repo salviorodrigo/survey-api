@@ -1,5 +1,5 @@
 import { badRequest, serverError, unauthorized, ok } from '../../helpers/http/http-helper'
-import { HttpRequest, Authenticator, Validator, AuthenticationModel } from './login-protocols'
+import { HttpRequest, Authenticator, Validator, AuthenticatorModel } from './login-protocols'
 import { LoginController } from './login'
 import { MissingParamError } from '../../errors'
 
@@ -21,7 +21,7 @@ const makeValidatorStub = (): Validator => {
 
 const makeAuthenticatorStub = (): Authenticator => {
   class AuthenticatorStub implements Authenticator {
-    async auth (credentials: AuthenticationModel): Promise<string> {
+    async auth (credentials: AuthenticatorModel): Promise<string> {
       return 'any_token'
     }
   }

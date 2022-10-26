@@ -1,5 +1,5 @@
 import { Authenticator, AuthenticatorModel } from '../../../domain/usecases/authenticator'
-import { LoadAccountByEmailRepository } from '../../protocols/load-account-by-email-repository'
+import { LoadAccountByEmailRepository } from '../../protocols/db/load-account-by-email-repository'
 
 export class DbAuthenticator implements Authenticator {
   private readonly loadAccountByEmailRepository: LoadAccountByEmailRepository

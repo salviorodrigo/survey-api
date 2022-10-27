@@ -17,6 +17,12 @@ const makeFakeCredentials = (): AuthenticatorModel => ({
   password: 'any_password'
 })
 
+const makeFakeAccessToken = async (): Promise<String> => {
+  const tokenGeneratorStub = makeTokenGeneratorStub()
+  const fakeAccount = makeFakeAccountModel()
+  return await tokenGeneratorStub.generate(fakeAccount.id)
+}
+
 const makeLoadAccountByEmailRepositoryStub = (): LoadAccountByEmailRepository => {
   class LoadAccountByEmailRepositoryStub implements LoadAccountByEmailRepository {
     async load (email: string): Promise<AccountModel> {
@@ -138,5 +144,13 @@ describe('DbAuthentication UseCase', () => {
     const credentials = makeFakeCredentials()
     const httpResponse = sut.auth(credentials)
     await expect(httpResponse).rejects.toThrow()
+  })
+
+  test('Should DbAuthenticator return access token on success', async () => {
+    const { sut } = makeSut()
+    const credentials = makeFakeCredentials()
+    const fakeAccessToken = await makeFakeAccessToken()
+    const httpResponse = await sut.auth(credentials)
+    expect(httpResponse).toBe(fakeAccessToken)
   })
 })

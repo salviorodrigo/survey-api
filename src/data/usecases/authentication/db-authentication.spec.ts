@@ -2,6 +2,7 @@ import { AuthenticatorModel } from './../../../domain/usecases/authenticator'
 import { AccountModel } from '../../../domain/models/account'
 import { LoadAccountByEmailRepository } from '../../protocols/db/load-account-by-email-repository'
 import { DbAuthenticator } from './db-authentication'
+import { HashComparer } from '../../protocols/cryptography/hash-comparer'
 
 const makeFakeAccountModel = (): AccountModel => ({
   id: 'valid_id',
@@ -25,17 +26,29 @@ const makeLoadAccountByEmailRepositoryStub = (): LoadAccountByEmailRepository =>
   return new LoadAccountByEmailRepositoryStub()
 }
 
+const makeHashComparerStub = (): HashComparer => {
+  class HashComparerStub implements HashComparer {
+    async compare (value: string, hash: string): Promise<boolean> {
+      return await new Promise(resolve => resolve(true))
+    }
+  }
+  return new HashComparerStub()
+}
+
 interface SutTypes {
   sut: DbAuthenticator
   loadAccountByEmailRepositoryStub: LoadAccountByEmailRepository
+  hashComparerStub: HashComparer
 }
 
 const makeSut = (): SutTypes => {
   const loadAccountByEmailRepositoryStub = makeLoadAccountByEmailRepositoryStub()
-  const sut = new DbAuthenticator(loadAccountByEmailRepositoryStub)
+  const hashComparerStub = makeHashComparerStub()
+  const sut = new DbAuthenticator(loadAccountByEmailRepositoryStub, hashComparerStub)
   return {
     sut,
-    loadAccountByEmailRepositoryStub
+    loadAccountByEmailRepositoryStub,
+    hashComparerStub
   }
 }
 
@@ -64,5 +77,15 @@ describe('DbAuthentication UseCase', () => {
     const credentials = makeFakeCredentials()
     const accessToken = await sut.auth(credentials)
     expect(accessToken).toBeNull()
+  })
+
+  test('Should callHashCompare with correct values', async () => {
+    const { sut, hashComparerStub } = makeSut()
+    const compareSpy = jest.spyOn(hashComparerStub, 'compare')
+    const credentials = makeFakeCredentials()
+    await sut.auth(credentials)
+
+    const fakeAccount = makeFakeAccountModel()
+    expect(compareSpy).toHaveBeenCalledWith(credentials.password, fakeAccount.password)
   })
 })

@@ -1,7 +1,7 @@
-import { AuthenticatorModel } from './../../../domain/usecases/authenticator'
+import { AuthenticatorModel } from '../../../domain/usecases/authenticator'
 import { AccountModel } from '../../../domain/models/account'
 import { LoadAccountByEmailRepository } from '../../protocols/db/load-account-by-email-repository'
-import { DbAuthenticator } from './db-authentication'
+import { DbAuthenticator } from './db-authenticator'
 import { HashComparer } from '../../protocols/cryptography/hash-comparer'
 import { TokenGenerator } from '../../protocols/cryptography/token-generator'
 

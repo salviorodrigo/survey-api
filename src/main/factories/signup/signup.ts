@@ -9,7 +9,7 @@ import { makeSignUpValidator } from './signup-validator'
 import env from '../../config/env'
 
 export const makeSignUpController = (): Controller => {
-  const bcryptAdapter = new BcryptAdapter(env.saltFromEncrypter)
+  const bcryptAdapter = new BcryptAdapter(env.saltFromHasher)
   const addAccountRepository = new AccountMongoRepository()
   const dbAddAccount = new DbAddAccount(bcryptAdapter, addAccountRepository)
   const signUpController = new SignUpController(dbAddAccount, makeSignUpValidator())

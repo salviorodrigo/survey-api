@@ -27,7 +27,7 @@ export class DbAuthenticator implements Authenticator {
 
   async auth (credentials: AuthenticatorModel): Promise<string> {
     let accessToken = null
-    const account = await this.loadAccountByEmailRepository.load(credentials.email)
+    const account = await this.loadAccountByEmailRepository.loadByEmail(credentials.email)
     const validation = await this.hashComparer.compare(credentials.password, account?.password ?? 'fakeHash')
     if (validation && account) {
       accessToken = await this.encrypter.encrypt(account.id)

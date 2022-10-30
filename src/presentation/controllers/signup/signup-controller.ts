@@ -1,12 +1,12 @@
-import { Controller, HttpRequest, HttpResponse, Authenticator, Validator } from './login-protocols'
-import { badRequest, serverError, unauthorized, ok } from '../../helpers/http/http-helper'
+import { badRequest, serverError, ok } from '../../helpers/http/http-helper'
+import { HttpRequest, HttpResponse, Controller, AddAccount, Validator } from './signup-controller-protocols'
 
-export class LoginController implements Controller {
-  private readonly authenticator: Authenticator
+export class SignUpController implements Controller {
+  private readonly addAccount: AddAccount
   private readonly validator: Validator
 
-  constructor (authenticator: Authenticator, validator: Validator) {
-    this.authenticator = authenticator
+  constructor (addAccount: AddAccount, validator: Validator) {
+    this.addAccount = addAccount
     this.validator = validator
   }
 
@@ -18,6 +18,7 @@ export class LoginController implements Controller {
         body: {}
       }
     }
+
     try {
       if (!thisResponse.filled) {
         const validatorErrorBag = this.validator.validate(httpRequest.body)
@@ -27,22 +28,17 @@ export class LoginController implements Controller {
         }
       }
 
-      const { email, password } = httpRequest.body
+      const { name, email, password } = httpRequest.body
 
       if (!thisResponse.filled) {
-        const accessToken = await this.authenticator.auth({
+        const account = await this.addAccount.add({
+          name,
           email,
           password
         })
-        thisResponse.filled = true
 
-        if (!accessToken) {
-          thisResponse.data = unauthorized()
-        } else {
-          thisResponse.data = ok({
-            accessToken
-          })
-        }
+        thisResponse.data = ok(account)
+        thisResponse.filled = true
       }
     } catch (error) {
       thisResponse.filled = true

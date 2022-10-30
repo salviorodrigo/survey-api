@@ -1,7 +1,7 @@
 import { describe, expect, test } from '@jest/globals'
 import { EmailValidator } from './email-validator'
 import { InvalidParamError } from '../../errors'
-import { EmailValidator as EmailValidatorInterface } from '../../controllers/signup/signup-protocols'
+import { EmailValidator as EmailValidatorInterface } from '../../controllers/signup/signup-controller-protocols'
 
 const makeEmailValidator = (): EmailValidatorInterface => {
   class EmailValidatorAdapterStub implements EmailValidatorInterface {

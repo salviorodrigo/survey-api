@@ -1,3 +1,4 @@
+import { AddAccountModel } from './../../../../domain/usecases/add-account'
 import { AccountMongoRepository } from './account'
 import { MongoHelper } from '../helpers/mongo-helper'
 
@@ -15,17 +16,19 @@ describe('Account Mongo Repository', () => {
     await accountCollection.deleteMany({})
   })
 
+  const makeFakeAddAccount = (): AddAccountModel => ({
+    name: 'any_name',
+    email: 'any_email@mail.com',
+    password: 'any_password'
+  })
+
   const makeSut = (): AccountMongoRepository => {
     return new AccountMongoRepository()
   }
 
   test('Should return an account on add success', async () => {
     const sut = makeSut()
-    const account = await sut.add({
-      name: 'any_name',
-      email: 'any_email@mail.com',
-      password: 'any_password'
-    })
+    const account = await sut.add(makeFakeAddAccount())
     expect(account).toBeTruthy()
     expect(account.id).toBeTruthy()
     expect(account.name).toBe('any_name')
@@ -35,11 +38,7 @@ describe('Account Mongo Repository', () => {
 
   test('Should return an account on loadByEmail success', async () => {
     const sut = makeSut()
-    await sut.add({
-      name: 'any_name',
-      email: 'any_email@mail.com',
-      password: 'any_password'
-    })
+    await sut.add(makeFakeAddAccount())
     const account = await sut.loadByEmail('any_email@mail.com')
     expect(account).toBeTruthy()
     expect(account.id).toBeTruthy()
@@ -56,11 +55,7 @@ describe('Account Mongo Repository', () => {
 
   test('Should update the account accessToken on updateAccessToken success', async () => {
     const sut = makeSut()
-    const account = await sut.add({
-      name: 'any_name',
-      email: 'any_email@mail.com',
-      password: 'any_password'
-    })
+    const account = await sut.add(makeFakeAddAccount())
     expect(account.accessToken).toBeFalsy()
     await sut.updateAccessToken(account.id, 'valid_accessToken')
     const accountWithAccessToken = await sut.loadByEmail(account.email)

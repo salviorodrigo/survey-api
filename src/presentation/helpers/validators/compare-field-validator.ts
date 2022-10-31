@@ -2,13 +2,10 @@ import { InvalidParamError } from '../../errors'
 import { Validator } from '../../protocols/validator'
 
 export class CompareFieldValidator implements Validator {
-  private readonly fieldName: string
-  private readonly confirmationFieldName: string
-
-  constructor (fieldName: string, confirmationFieldName: string) {
-    this.fieldName = fieldName
-    this.confirmationFieldName = confirmationFieldName
-  }
+  constructor (
+    private readonly fieldName: string,
+    private readonly confirmationFieldName: string
+  ) {}
 
   validate (input: any): Error {
     let thisResponse = null as Error

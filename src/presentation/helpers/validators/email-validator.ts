@@ -3,13 +3,10 @@ import { EmailValidator as EmailValidatorInterface } from '../../protocols/email
 import { Validator } from '../../protocols/validator'
 
 export class EmailValidator implements Validator {
-  private readonly emailFieldName: string
-  private readonly emailValidatorAdapter: EmailValidatorInterface
-
-  constructor (emailFieldName: string, emailValidatorAdapter: EmailValidatorInterface) {
-    this.emailFieldName = emailFieldName
-    this.emailValidatorAdapter = emailValidatorAdapter
-  }
+  constructor (
+    private readonly emailFieldName: string,
+    private readonly emailValidatorAdapter: EmailValidatorInterface
+  ) {}
 
   validate (input: any): Error {
     let thisResponse = null as Error

@@ -1,5 +1,6 @@
 export default {
   mongoUrl: process.env.MONGO_URL ?? 'mongodb://localhost:27017/survey-api',
   port: process.env.PORT ?? 5050,
-  saltFromHasher: 12
+  saltFromHasher: process.env.SALT_FROM_HASHER as unknown as number ?? 12,
+  jwtSecret: process.env.JWT_SECRET ?? 'secret'
 }

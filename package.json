@@ -1,6 +1,6 @@
 {
   "name": "survey-api",
-  "version": "1.1.0",
+  "version": "1.2.0",
   "main": "index.js",
   "author": "Rodrigo Salvio <rodrigosalvio@hotmail.com>",
   "license": "MIT",
@@ -35,7 +35,8 @@
   "scripts": {
     "start": "node dist/main/server.js",
     "build": "rimraf dist && tsc",
-    "up": "yarn build && docker-compose up -d",
+    "debug": "node --inspect=0.0.0.0:9223 --nolazy dist/main/server.js",
+    "up": "npm run build && docker-compose up -d",
     "down": "docker-compose down",
     "commit": "cz",
     "test": "jest --passWithNoTests --silent --noStackTrace --runInBand",
@@ -58,6 +59,6 @@
     "validator": "^13.7.0"
   },
   "engines": {
-    "node": "16.x"
+    "node": "14.x"
   }
 }

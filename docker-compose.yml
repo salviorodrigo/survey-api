@@ -10,12 +10,12 @@ services:
       - '27017:27017'
   api:
     container_name: 'api-container'
-    build: './Dockerfile'
+    build: .
     image: 'survey-api'
     restart: always
     command: 'npm start'
     volumes:
-      - ./dist:/src/survey-api/dist
+      - ./dist:/usr/src/survey-api/dist
     ports:
       - '5050:5050'
     links:

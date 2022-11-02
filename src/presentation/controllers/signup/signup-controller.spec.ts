@@ -20,6 +20,14 @@ const makeFakeAccount = (): AccountModel => ({
   password: 'valid_password'
 })
 
+const makeFakeAccessToken = async (): Promise<string> => {
+  const fakeAccount = makeFakeAccount()
+  return await makeAuthenticatorStub().auth({
+    email: fakeAccount.email,
+    password: fakeAccount.password
+  })
+}
+
 const makeValidatorStub = (): Validator => {
   class ValidatorStub implements Validator {
     validate (input: any): Error | null {
@@ -95,7 +103,9 @@ describe('Signup Controller', () => {
     const { sut } = makeSut()
     const httpRequest = makeFakeRequest()
     const httpResponse = await sut.handle(httpRequest)
-    expect(httpResponse).toEqual(ok(makeFakeAccount()))
+    expect(httpResponse).toEqual(ok({
+      accessToken: await makeFakeAccessToken()
+    }))
   })
 
   test('Should call Validator with correct values', async () => {
@@ -119,11 +129,11 @@ describe('Signup Controller', () => {
 
     const authSpy = jest.spyOn(authenticatorStub, 'auth')
     const httpRequest: HttpRequest = makeFakeRequest()
-
-    const thisResponse = await sut.handle(httpRequest)
+    const fakeAccount = makeFakeAccount()
+    await sut.handle(httpRequest)
     expect(authSpy).toHaveBeenCalledWith({
-      email: thisResponse.body.email,
-      password: thisResponse.body.password
+      email: fakeAccount.email,
+      password: fakeAccount.password
     })
   })
 

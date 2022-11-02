@@ -1,7 +1,7 @@
 import { describe, expect, test } from '@jest/globals'
 import { SignUpController } from './signup-controller'
 import { MissingParamError } from '../../errors'
-import { AddAccount, AddAccountModel, AccountModel, Validator, HttpRequest } from './signup-controller-protocols'
+import { AddAccount, AddAccountModel, AccountModel, Validator, HttpRequest, Authenticator, AuthenticatorModel } from './signup-controller-protocols'
 import { ok, badRequest, serverError } from '../../helpers/http/http-helper'
 
 const makeFakeRequest = (): HttpRequest => ({
@@ -22,7 +22,7 @@ const makeFakeAccount = (): AccountModel => ({
 
 const makeValidatorStub = (): Validator => {
   class ValidatorStub implements Validator {
-    validate (input: any): Error {
+    validate (input: any): Error | null {
       return null
     }
   }
@@ -39,20 +39,32 @@ const makeAddAccount = (): AddAccount => {
   return new AddAccountStub()
 }
 
+const makeAuthenticatorStub = (): Authenticator => {
+  class AuthenticatorStub implements Authenticator {
+    async auth (credentials: AuthenticatorModel): Promise<string> {
+      return 'any_token'
+    }
+  }
+  return new AuthenticatorStub()
+}
+
 interface SutTypes {
   sut: SignUpController
   addAccountStub: AddAccount
   validatorStub: Validator
+  authenticatorStub: Authenticator
 }
 
 const makeSut = (): SutTypes => {
   const addAccountStub = makeAddAccount()
   const validatorStub = makeValidatorStub()
-  const sut = new SignUpController(addAccountStub, validatorStub)
+  const authenticatorStub = makeAuthenticatorStub()
+  const sut = new SignUpController(addAccountStub, validatorStub, authenticatorStub)
   return {
     sut,
     addAccountStub,
-    validatorStub
+    validatorStub,
+    authenticatorStub
   }
 }
 
@@ -100,5 +112,18 @@ describe('Signup Controller', () => {
     const httpRequest = makeFakeRequest()
     const httpResponse = await sut.handle(httpRequest)
     expect(httpResponse).toEqual(badRequest(new MissingParamError('any_field')))
+  })
+
+  test('Should call Authentication with correct values', async () => {
+    const { sut, authenticatorStub } = makeSut()
+
+    const authSpy = jest.spyOn(authenticatorStub, 'auth')
+    const httpRequest: HttpRequest = makeFakeRequest()
+
+    const thisResponse = await sut.handle(httpRequest)
+    expect(authSpy).toHaveBeenCalledWith({
+      email: thisResponse.body.email,
+      password: thisResponse.body.password
+    })
   })
 })

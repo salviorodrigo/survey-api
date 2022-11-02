@@ -12,7 +12,7 @@ const makeFakeRequest = (): HttpRequest => ({
 
 const makeValidatorStub = (): Validator => {
   class ValidatorStub implements Validator {
-    validate (input: any): Error {
+    validate (input: any): Error | null {
       return null
     }
   }

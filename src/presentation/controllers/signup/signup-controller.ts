@@ -1,10 +1,11 @@
 import { badRequest, serverError, ok } from '../../helpers/http/http-helper'
-import { HttpRequest, HttpResponse, Controller, AddAccount, Validator } from './signup-controller-protocols'
+import { HttpRequest, HttpResponse, Controller, AddAccount, Validator, Authenticator } from './signup-controller-protocols'
 
 export class SignUpController implements Controller {
   constructor (
     private readonly addAccount: AddAccount,
-    private readonly validator: Validator
+    private readonly validator: Validator,
+    private readonly authenticator: Authenticator
   ) {}
 
   async handle (httpRequest: HttpRequest): Promise<HttpResponse> {
@@ -33,7 +34,10 @@ export class SignUpController implements Controller {
           email,
           password
         })
-
+        await this.authenticator.auth({
+          email: account.email,
+          password: account.password
+        })
         thisResponse.data = ok(account)
         thisResponse.filled = true
       }

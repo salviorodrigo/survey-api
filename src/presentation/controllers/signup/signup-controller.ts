@@ -34,11 +34,13 @@ export class SignUpController implements Controller {
           email,
           password
         })
-        await this.authenticator.auth({
+        const accessToken = await this.authenticator.auth({
           email: account.email,
           password: account.password
         })
-        thisResponse.data = ok(account)
+        thisResponse.data = ok({
+          accessToken
+        })
         thisResponse.filled = true
       }
     } catch (error) {

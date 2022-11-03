@@ -89,6 +89,16 @@ describe('DbAddAccount Usecase', () => {
     expect(hasherSpy).toHaveBeenCalledWith(accountData.password)
   })
 
+  test('Should throw if LoadAccountByEmailRepository throws', async () => {
+    const { sut, loadAccountByEmailRepositoryStub } = makeSut()
+    jest.spyOn(loadAccountByEmailRepositoryStub, 'loadByEmail').mockReturnValueOnce(
+      new Promise((resolve, reject) => reject(new Error()))
+    )
+    const accountData = makeFakeAccountData()
+    const httpResponse = sut.add(accountData)
+    await expect(httpResponse).rejects.toThrow()
+  })
+
   test('Should throw if Hasher throws', async () => {
     const { sut, hasherStub } = makeSut()
     jest.spyOn(hasherStub, 'hash')

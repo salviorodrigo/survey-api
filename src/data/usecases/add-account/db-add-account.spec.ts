@@ -73,6 +73,14 @@ describe('DbAddAccount Usecase', () => {
     expect(loadSpy).toHaveBeenCalledWith(accountData.email)
   })
 
+  test('Should returns null if LoadAccountByEmailRepository returns an account', async () => {
+    const { sut, loadAccountByEmailRepositoryStub } = makeSut()
+    jest.spyOn(loadAccountByEmailRepositoryStub, 'loadByEmail').mockResolvedValueOnce(makeFakeAccount())
+    const accountData = makeFakeAccountData()
+    const thisResponse = await sut.add(accountData)
+    expect(thisResponse).toBeNull()
+  })
+
   test('Should call Hasher with correct password', async () => {
     const { sut, hasherStub } = makeSut()
     const hasherSpy = jest.spyOn(hasherStub, 'hash')

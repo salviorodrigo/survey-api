@@ -1,4 +1,5 @@
-import { badRequest, serverError, ok } from '../../helpers/http/http-helper'
+import { EmailTakenError } from '../../errors/email-taken-error'
+import { badRequest, serverError, ok, forbidden } from '../../helpers/http/http-helper'
 import { HttpRequest, HttpResponse, Controller, AddAccount, Validator, Authenticator } from './signup-controller-protocols'
 
 export class SignUpController implements Controller {
@@ -18,6 +19,8 @@ export class SignUpController implements Controller {
     }
 
     try {
+      const { name, email, password } = httpRequest.body
+
       if (!thisResponse.filled) {
         const validatorErrorBag = this.validator.validate(httpRequest.body)
         if (validatorErrorBag) {
@@ -26,21 +29,22 @@ export class SignUpController implements Controller {
         }
       }
 
-      const { name, email, password } = httpRequest.body
-
       if (!thisResponse.filled) {
         const account = await this.addAccount.add({
           name,
           email,
           password
         })
-        const accessToken = await this.authenticator.auth({
-          email: account.email,
-          password: account.password
-        })
-        thisResponse.data = ok({
-          accessToken
-        })
+
+        if (account) {
+          const accessToken = await this.authenticator.auth({
+            email: account.email,
+            password: account.password
+          })
+          thisResponse.data = ok({ accessToken })
+        } else {
+          thisResponse.data = forbidden(new EmailTakenError())
+        }
         thisResponse.filled = true
       }
     } catch (error) {

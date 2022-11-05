@@ -1,5 +1,5 @@
-import { EmailTakenError } from '../../errors/email-taken-error'
-import { badRequest, serverError, ok, forbidden } from '../../helpers/http/http-helper'
+import { EmailTakenError } from '../../../errors/email-taken-error'
+import { badRequest, serverError, ok, forbidden } from '../../../helpers/http/http-helper'
 import { HttpRequest, HttpResponse, Controller, AddAccount, Validator, Authenticator } from './signup-controller-protocols'
 
 export class SignUpController implements Controller {

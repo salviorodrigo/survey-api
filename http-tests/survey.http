@@ -1,0 +1,14 @@
+# Execute with extensindo REST Client (Huachao Mao) for Visual Studio Code 
+
+POST http://localhost:5050/api/polls HTTP/1.1
+content-type: application/json
+
+{
+    "question": "Question 1",
+    "answers": [{
+      "image": "http://localhost:5050/image.jpg",
+      "answer": "Answer 1"
+    },{
+      "answer": "Answer 2"
+    }]
+}

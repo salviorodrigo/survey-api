@@ -16,7 +16,7 @@ const makeFakeAccount = (): AccountModel => ({
   id: 'valid_id',
   name: 'valid_name',
   email: 'valid_email@mail.com',
-  password: 'valid_password'
+  password: 'hash_password'
 })
 
 const makeFakeAccessToken = async (): Promise<string> => {
@@ -136,11 +136,10 @@ describe('Signup Controller', () => {
 
     const authSpy = jest.spyOn(authenticatorStub, 'auth')
     const httpRequest: HttpRequest = makeFakeRequest()
-    const fakeAccount = makeFakeAccount()
     await sut.handle(httpRequest)
     expect(authSpy).toHaveBeenCalledWith({
-      email: fakeAccount.email,
-      password: fakeAccount.password
+      email: httpRequest.body.email,
+      password: httpRequest.body.password
     })
   })
 

@@ -1,5 +1,4 @@
-import { AddSurvey } from './../../../../domain/usecases/add-survey'
-import { Controller, HttpResponse, HttpRequest, Validator } from '../../../protocols'
+import { Validator, HttpRequest, AddSurvey, Controller, HttpResponse } from './add-survey-protocols'
 import { badRequest } from '../../../helpers/http/http-helper'
 
 export class AddSurveyController implements Controller {

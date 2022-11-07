@@ -103,4 +103,14 @@ describe('DbLoadAccountByToken Usecase', () => {
     const thisResponse = sut.load(fakeAccessToken, fakeRole)
     await expect(thisResponse).rejects.toThrow()
   })
+
+  test('Should throw if LoadAccountByTokenRepository throws', async () => {
+    const { sut, loadAccountByIdRepositoryStub } = makeSut()
+    jest.spyOn(loadAccountByIdRepositoryStub, 'loadByToken').mockImplementationOnce(() => {
+      throw new Error()
+    })
+    const { fakeAccessToken, fakeRole } = makeFakeAccessToken()
+    const thisResponse = sut.load(fakeAccessToken, fakeRole)
+    await expect(thisResponse).rejects.toThrow()
+  })
 })

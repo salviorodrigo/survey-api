@@ -6,6 +6,7 @@
     "rules": {
         "@typescript-eslint/strict-boolean-expressions": "off",
         "@typescript-eslint/method-signature-style": ["error", "method"],
-        "n/no-path-concat": "off"
+        "n/no-path-concat": "off",
+        "@typescript-eslint/no-misused-promises": "off"
     }
 }

@@ -1,4 +1,4 @@
-import { makeDbAddSurvey } from './../../usecases/add-survey/db-add-survey-factory'
+import { makeDbAddSurvey } from './../../usecases/survey/add-survey/db-add-survey-factory'
 import { makeAddSurveyValidator } from './add-survey-validator-factory'
 import { AddSurveyController } from './../../../../presentation/controllers/survey/add-survey/add-survey-controller'
 import { Controller } from '../../../../presentation/protocols'

@@ -10,7 +10,7 @@ describe('DbLoadAccountByToken Usecase', () => {
   const makeDecrypterStub = (): Decrypter => {
     class DecrypterStub implements Decrypter {
       async decrypt (value: string): Promise<string> {
-        return await Promise.resolve('any_value')
+        return await Promise.resolve('any_valuegit ')
       }
     }
     return new DecrypterStub()
@@ -35,5 +35,13 @@ describe('DbLoadAccountByToken Usecase', () => {
     const { fakeAccessToken, fakeRole } = makeFakeAccessToken()
     await sut.load(fakeAccessToken, fakeRole)
     expect(decryptSpy).toHaveBeenCalledWith(fakeAccessToken)
+  })
+
+  test('Should returns null if Decrypter returns null', async () => {
+    const { sut, decrypterStub } = makeSut()
+    jest.spyOn(decrypterStub, 'decrypt').mockResolvedValueOnce(null)
+    const { fakeAccessToken, fakeRole } = makeFakeAccessToken()
+    const thisResponse = await sut.load(fakeAccessToken, fakeRole)
+    expect(thisResponse).toBeNull()
   })
 })

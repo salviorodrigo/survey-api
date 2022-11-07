@@ -93,4 +93,14 @@ describe('DbLoadAccountByToken Usecase', () => {
     const thisResponse = await sut.load(fakeAccessToken, fakeRole)
     expect(thisResponse).toEqual(makeFakeAccount())
   })
+
+  test('Should throw if Decrypter throws', async () => {
+    const { sut, decrypterStub } = makeSut()
+    jest.spyOn(decrypterStub, 'decrypt').mockImplementationOnce(() => {
+      throw new Error()
+    })
+    const { fakeAccessToken, fakeRole } = makeFakeAccessToken()
+    const thisResponse = sut.load(fakeAccessToken, fakeRole)
+    await expect(thisResponse).rejects.toThrow()
+  })
 })

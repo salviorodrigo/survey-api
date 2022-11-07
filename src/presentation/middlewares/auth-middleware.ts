@@ -4,7 +4,11 @@ import { Middleware, HttpRequest, HttpResponse } from '../protocols'
 import { LoadAccountByToken } from '../../domain/usecases/load-account-by-token'
 
 export class AuthMiddleware implements Middleware {
-  constructor (private readonly loadAccountByTokenStub: LoadAccountByToken) {}
+  constructor (
+    private readonly loadAccountByTokenStub: LoadAccountByToken,
+    private readonly role?: string
+  ) {}
+
   async handle (httpRequest: HttpRequest): Promise<HttpResponse> {
     const thisResponse = {
       filled: false,
@@ -19,7 +23,7 @@ export class AuthMiddleware implements Middleware {
 
       if (!thisResponse.filled) {
         const accessToken = httpRequest.headers?.['x-access-token']
-        const account = await this.loadAccountByTokenStub.load(accessToken)
+        const account = await this.loadAccountByTokenStub.load(accessToken, this.role)
         if (account) {
           thisResponse.data = ok({ accountId: account.id })
           thisResponse.filled = true

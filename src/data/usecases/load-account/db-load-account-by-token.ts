@@ -14,11 +14,10 @@ export class DbLoadAccountByToken implements LoadAccountByToken {
       filled: false,
       data: null
     }
-    let decryptToken: string | null
     let account: AccountModel | null
 
     if (!thisResponse.filled) {
-      decryptToken = await this.decrypter.decrypt(accessToken)
+      const decryptToken = await this.decrypter.decrypt(accessToken)
       if (!decryptToken) {
         thisResponse.data = null
         thisResponse.filled = true
@@ -26,7 +25,7 @@ export class DbLoadAccountByToken implements LoadAccountByToken {
     }
 
     if (!thisResponse.filled) {
-      account = await this.loadAccountByIdRepository.loadByToken(decryptToken, role)
+      account = await this.loadAccountByIdRepository.loadByToken(accessToken, role)
       if (!account) {
         thisResponse.data = null
         thisResponse.filled = true

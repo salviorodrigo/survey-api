@@ -59,4 +59,13 @@ describe('DbLoadPolls Usecase', () => {
     const thisResponse = await sut.load()
     expect(thisResponse).toEqual(makeFakePolls())
   })
+
+  test('Should throw if LoadPollsRepository throws', async () => {
+    const { sut, loadPollsRepositoyStub } = makeSut()
+    jest.spyOn(loadPollsRepositoyStub, 'loadAll').mockImplementationOnce(() => {
+      throw new Error()
+    })
+    const thisResponse = sut.load()
+    await expect(thisResponse).rejects.toThrow()
+  })
 })

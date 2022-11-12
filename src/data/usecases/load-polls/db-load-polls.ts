@@ -6,7 +6,7 @@ export class DbLoadPolls implements LoadPolls {
   constructor (private readonly loadPollsRepository: LoadPollsRepository) {}
 
   async load (): Promise<SurveyModel[]> {
-    await this.loadPollsRepository.loadAll()
-    return await Promise.resolve(null)
+    const pollsList = await this.loadPollsRepository.loadAll()
+    return pollsList
   }
 }

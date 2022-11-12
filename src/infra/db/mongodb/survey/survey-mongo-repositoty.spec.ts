@@ -2,16 +2,19 @@ import { Collection } from 'mongodb'
 import { SurveyMongoRepository } from './survey-mongo-repository'
 import { AddSurveyModel } from '../../../../domain/usecases/add-survey'
 import { MongoHelper } from '../helpers/mongo-helper'
+import MockDate from 'mockdate'
 
 describe('Survey Mongo Repository', () => {
   let surveyCollection: Collection
 
   beforeAll(async () => {
     await MongoHelper.connect(process.env.MONGO_URL)
+    MockDate.set(new Date())
   })
 
   afterAll(async () => {
     await MongoHelper.disconnect()
+    MockDate.reset()
   })
 
   beforeEach(async () => {
@@ -26,7 +29,8 @@ describe('Survey Mongo Repository', () => {
       answer: 'any_answer'
     }, {
       answer: 'any_answer'
-    }]
+    }],
+    date: new Date()
   })
 
   const makeSut = (): SurveyMongoRepository => {

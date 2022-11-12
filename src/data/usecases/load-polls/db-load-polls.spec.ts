@@ -53,4 +53,10 @@ describe('DbLoadPolls Usecase', () => {
     await sut.load()
     expect(loadSpy).toHaveBeenCalled()
   })
+
+  test('Should return a list of polls on success', async () => {
+    const { sut } = makeSut()
+    const thisResponse = await sut.load()
+    expect(thisResponse).toEqual(makeFakePolls())
+  })
 })

@@ -1,5 +1,5 @@
 import { SurveyModel, LoadPolls } from './load-polls-protocols'
-import { ok } from '../../../helpers/http/http-helper'
+import { ok, serverError } from '../../../helpers/http/http-helper'
 import { LoadPollsController } from './load-polls-controller'
 import MockDate from 'mockdate'
 
@@ -67,5 +67,14 @@ describe('LoadPolls Controller', () => {
     const { sut } = makeSut()
     const httpResponse = await sut.handle({})
     expect(httpResponse).toEqual(ok(makeFakePolls()))
+  })
+
+  test('Should return 500 if LoadPolls throws', async () => {
+    const { sut, loadPollsStub } = makeSut()
+    jest.spyOn(loadPollsStub, 'load').mockImplementationOnce(() => {
+      throw new Error()
+    })
+    const httpResponse = await sut.handle({})
+    expect(httpResponse).toEqual(serverError(new Error()))
   })
 })

@@ -1,4 +1,5 @@
 import { SurveyModel, LoadPolls } from './load-polls-protocols'
+import { ok } from '../../../helpers/http/http-helper'
 import { LoadPollsController } from './load-polls-controller'
 import MockDate from 'mockdate'
 
@@ -11,7 +12,7 @@ describe('LoadPolls Controller', () => {
     MockDate.reset()
   })
 
-  const makefakePolls = (): SurveyModel[] => {
+  const makeFakePolls = (): SurveyModel[] => {
     return [{
       id: 'any_id',
       question: 'any_question',
@@ -35,7 +36,7 @@ describe('LoadPolls Controller', () => {
   const makeLoadPollsStub = (): LoadPolls => {
     class LoadPollsStub implements LoadPolls {
       async load (): Promise<SurveyModel[]> {
-        return await Promise.resolve(makefakePolls())
+        return await Promise.resolve(makeFakePolls())
       }
     }
     return new LoadPollsStub()
@@ -55,10 +56,16 @@ describe('LoadPolls Controller', () => {
     }
   }
 
-  test('Should call LoadPols', async () => {
+  test('Should call LoadPolls', async () => {
     const { sut, loadPollsStub } = makeSut()
     const loadSpy = jest.spyOn(loadPollsStub, 'load')
     await sut.handle({})
     expect(loadSpy).toHaveBeenCalled()
+  })
+
+  test('Should returns 200 on success', async () => {
+    const { sut } = makeSut()
+    const httpResponse = await sut.handle({})
+    expect(httpResponse).toEqual(ok(makeFakePolls()))
   })
 })

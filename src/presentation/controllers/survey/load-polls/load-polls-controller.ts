@@ -1,5 +1,5 @@
 import { Controller, HttpRequest, HttpResponse, LoadPolls } from './load-polls-protocols'
-import { ok, serverError } from '../../../helpers/http/http-helper'
+import { noContent, ok, serverError } from '../../../helpers/http/http-helper'
 
 export class LoadPollsController implements Controller {
   constructor (private readonly loadPolls: LoadPolls) {}
@@ -13,8 +13,11 @@ export class LoadPollsController implements Controller {
     try {
       if (!thisReponse.filled) {
         const polls = await this.loadPolls.load()
-        if (polls) {
+        if (polls.length) {
           thisReponse.data = ok(polls)
+          thisReponse.filled = true
+        } else {
+          thisReponse.data = noContent()
           thisReponse.filled = true
         }
       }

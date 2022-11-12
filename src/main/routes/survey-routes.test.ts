@@ -72,4 +72,13 @@ describe('Survey Routes', () => {
         .expect(204)
     })
   })
+
+  describe('GET /polls', () => {
+    test('Should return 403 on load polls without accessToken', async () => {
+      await request(app)
+        .get('/api/polls')
+        .send({})
+        .expect(403)
+    })
+  })
 })

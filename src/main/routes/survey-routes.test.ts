@@ -25,6 +25,26 @@ describe('Survey Routes', () => {
     await accountCollection.deleteMany({})
   })
 
+  const makeAccessToken = async (): Promise<string> => {
+    const res = await accountCollection.insertOne({
+      name: 'any_name',
+      email: 'any_email@mail.com',
+      password: 'hash_password',
+      role: 'admin'
+    })
+    const id = res.ops[0]._id
+    const accessToken = sign({ id }, env.jwtSecret)
+    await accountCollection.updateOne({
+      _id: id
+    }, {
+      $set: {
+        accessToken
+      }
+    })
+
+    return accessToken
+  }
+
   const makeFakeSurveyData = (): AddSurveyModel => ({
     question: 'any_question',
     answers: [{
@@ -38,47 +58,16 @@ describe('Survey Routes', () => {
     test('Should return 403 on add survey without accessToken', async () => {
       await request(app)
         .post('/api/polls')
-        .send({
-          question: 'Question 1',
-          answers: [{
-            image: 'http://localhost:5050/image-name.jpg',
-            answer: 'Answer 1'
-          }, {
-            answer: 'Answer 2'
-          }]
-        })
+        .send(makeFakeSurveyData())
         .expect(403)
     })
 
     test('Should return 204 on add survey with valid accessToken', async () => {
-      const res = await accountCollection.insertOne({
-        name: 'any_name',
-        email: 'any_email@mail.com',
-        password: 'hash_password',
-        role: 'admin'
-      })
-      const id = res.ops[0]._id
-      const accessToken = sign({ id }, env.jwtSecret)
-      await accountCollection.updateOne({
-        _id: id
-      }, {
-        $set: {
-          accessToken
-        }
-      })
-
+      const accessToken = await makeAccessToken()
       await request(app)
         .post('/api/polls')
         .set('x-access-token', accessToken)
-        .send({
-          question: 'Question 1',
-          answers: [{
-            image: 'http://localhost:5050/image-name.jpg',
-            answer: 'Answer 1'
-          }, {
-            answer: 'Answer 2'
-          }]
-        })
+        .send(makeFakeSurveyData())
         .expect(204)
     })
   })
@@ -92,22 +81,7 @@ describe('Survey Routes', () => {
     })
 
     test('Should return 204 on load polls if doesn\'t exists polls on database', async () => {
-      const res = await accountCollection.insertOne({
-        name: 'any_name',
-        email: 'any_email@mail.com',
-        password: 'hash_password',
-        role: 'admin'
-      })
-      const id = res.ops[0]._id
-      const accessToken = sign({ id }, env.jwtSecret)
-      await accountCollection.updateOne({
-        _id: id
-      }, {
-        $set: {
-          accessToken
-        }
-      })
-
+      const accessToken = await makeAccessToken()
       await request(app)
         .get('/api/polls')
         .set('x-access-token', accessToken)
@@ -116,24 +90,8 @@ describe('Survey Routes', () => {
     })
 
     test('Should return 200 on load polls success', async () => {
-      const res = await accountCollection.insertOne({
-        name: 'any_name',
-        email: 'any_email@mail.com',
-        password: 'hash_password',
-        role: 'admin'
-      })
-      const id = res.ops[0]._id
-      const accessToken = sign({ id }, env.jwtSecret)
-      await accountCollection.updateOne({
-        _id: id
-      }, {
-        $set: {
-          accessToken
-        }
-      })
-
+      const accessToken = await makeAccessToken()
       await surveyCollection.insertMany([
-        makeFakeSurveyData(),
         makeFakeSurveyData()
       ])
 

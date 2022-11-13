@@ -12,3 +12,9 @@ content-type: application/json
       "answer": "Answer 2"
     }]
 }
+
+###
+
+GET http://localhost:5050/api/polls HTTP/1.1
+content-type: application/json
+x-access-token: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjYzNzAzN2IwMDUzMGNjMDA0MGE3MzExMiIsImlhdCI6MTY2ODI5ODY3Mn0.GyKZUD1Zvr-Qv5hKmGCm6nX4x3UtNYZsSD8L-qZkEvY

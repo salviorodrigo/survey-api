@@ -80,5 +80,29 @@ describe('Survey Routes', () => {
         .send({})
         .expect(403)
     })
+
+    test('Should return 204 on load polls if doesn\'t exists polls on database', async () => {
+      const res = await accountCollection.insertOne({
+        name: 'any_name',
+        email: 'any_email@mail.com',
+        password: 'hash_password',
+        role: 'admin'
+      })
+      const id = res.ops[0]._id
+      const accessToken = sign({ id }, env.jwtSecret)
+      await accountCollection.updateOne({
+        _id: id
+      }, {
+        $set: {
+          accessToken
+        }
+      })
+
+      await request(app)
+        .get('/api/polls')
+        .set('x-access-token', accessToken)
+        .send({})
+        .expect(204)
+    })
   })
 })

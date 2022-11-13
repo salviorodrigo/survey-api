@@ -1,8 +1,16 @@
 import { SurveyModel } from '../../../domain/models/survey'
 import { LoadPollsRepository } from '../../protocols/db/survey/load-polls-repository'
 import { DbLoadPolls } from './db-load-polls'
+import MockDate from 'mockdate'
 
 describe('DbLoadPolls Usecase', () => {
+  beforeAll(() => {
+    MockDate.set(new Date())
+  })
+
+  afterAll(() => {
+    MockDate.reset()
+  })
   const makeFakePolls = (): SurveyModel[] => {
     return [{
       id: 'any_id',

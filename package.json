@@ -1,6 +1,6 @@
 {
   "name": "survey-api",
-  "version": "1.4.0",
+  "version": "1.4.1",
   "main": "index.js",
   "author": "Rodrigo Salvio <rodrigosalvio@hotmail.com>",
   "license": "MIT",

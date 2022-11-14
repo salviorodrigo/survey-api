@@ -1,10 +1,10 @@
-import request from 'supertest'
-import app from '../config/app'
-import env from '../config/env'
+import { AddSurveyModel } from '@/domain/usecases/add-survey'
+import { MongoHelper } from '@/infra/db/mongodb/helpers/mongo-helper'
+import app from '@/main/config/app'
+import env from '@/main/config/env'
 import { sign } from 'jsonwebtoken'
-import { MongoHelper } from '../../infra/db/mongodb/helpers/mongo-helper'
+import request from 'supertest'
 import { Collection } from 'mongodb'
-import { AddSurveyModel } from '../../domain/usecases/add-survey'
 
 describe('Survey Routes', () => {
   let surveyCollection: Collection

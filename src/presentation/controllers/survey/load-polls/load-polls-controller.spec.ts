@@ -1,6 +1,6 @@
 import { SurveyModel, LoadPolls } from './load-polls-protocols'
-import { noContent, ok, serverError } from '../../../helpers/http/http-helper'
 import { LoadPollsController } from './load-polls-controller'
+import { noContent, ok, serverError } from '@/presentation/helpers/http/http-helper'
 import MockDate from 'mockdate'
 
 describe('LoadPolls Controller', () => {

@@ -31,7 +31,7 @@ describe('AddSurvey Controller', () => {
     return new AddSurveyStub()
   }
 
-  interface SutTypes {
+  type SutTypes = {
     sut: AddSurveyController
     validatorStub: Validator
     addSurveyStub: AddSurvey

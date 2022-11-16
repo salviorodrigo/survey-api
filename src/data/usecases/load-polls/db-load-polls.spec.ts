@@ -41,7 +41,7 @@ describe('DbLoadPolls Usecase', () => {
     return new LoadPollsRepositoryStub()
   }
 
-  interface SutTypes {
+  type SutTypes = {
     sut: DbLoadPolls
     loadPollsRepositoyStub: LoadPollsRepository
   }

@@ -12,7 +12,7 @@ const makeValidatorStub = (): Validator => {
   return new ValidatorStub()
 }
 
-interface SutTypes {
+type SutTypes = {
   sut: ValidatorComposite
   validatorStubs: Validator[]
 }

@@ -55,7 +55,7 @@ const makeAuthenticatorStub = (): Authenticator => {
   return new AuthenticatorStub()
 }
 
-interface SutTypes {
+type SutTypes = {
   sut: SignUpController
   addAccountStub: AddAccount
   validatorStub: Validator

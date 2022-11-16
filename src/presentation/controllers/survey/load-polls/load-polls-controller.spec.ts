@@ -42,7 +42,7 @@ describe('LoadPolls Controller', () => {
     return new LoadPollsStub()
   }
 
-  interface SutTypes {
+  type SutTypes = {
     sut: LoadPollsController
     loadPollsStub: LoadPolls
   }

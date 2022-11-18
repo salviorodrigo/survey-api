@@ -24,12 +24,6 @@ describe('Survey Mongo Repository', () => {
 
   const makeFakeSurveyData = (): AddSurveyModel => ({
     question: 'any_question',
-    answers: [{
-      image: 'any_image',
-      answer: 'any_answer'
-    }, {
-      answer: 'any_answer'
-    }],
     date: new Date()
   })
 

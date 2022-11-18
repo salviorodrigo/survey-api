@@ -16,19 +16,10 @@ describe('LoadPolls Controller', () => {
     return [{
       id: 'any_id',
       question: 'any_question',
-      answers: [{
-        image: 'any_image',
-        answer: 'any_answer'
-      }, {
-        answer: 'any_anwer 2'
-      }],
       date: new Date()
     }, {
       id: 'another_id',
       question: 'another_question',
-      answers: [{
-        answer: 'another_answer'
-      }],
       date: new Date()
     }]
   }

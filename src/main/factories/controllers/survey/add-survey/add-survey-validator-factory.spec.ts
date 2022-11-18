@@ -9,7 +9,7 @@ describe('AddSurveyValidator Factory', () => {
     makeAddSurveyValidator()
     const validators: Validator[] = []
 
-    for (const field of ['question', 'answers']) {
+    for (const field of ['question']) {
       validators.push(new RequiredFieldValidator(field))
     }
 

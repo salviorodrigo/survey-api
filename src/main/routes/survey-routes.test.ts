@@ -47,10 +47,6 @@ describe('Survey Routes', () => {
 
   const makeFakeSurveyData = (): AddSurveyModel => ({
     question: 'any_question',
-    answers: [{
-      image: 'any_image',
-      answer: 'any_answer'
-    }],
     date: new Date()
   })
 

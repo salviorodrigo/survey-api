@@ -52,4 +52,10 @@ describe('DbLoadPolls Usecase', () => {
     const thisResponse = await sut.loadById(fakeSurvey.id)
     expect(thisResponse).toEqual(fakeSurvey)
   })
+
+  test('Should return null if LoadSurveyById returns empty', async () => {
+    const { sut } = makeSut()
+    const thisResponse = await sut.loadById('invalid_id')
+    expect(thisResponse).toBeNull()
+  })
 })

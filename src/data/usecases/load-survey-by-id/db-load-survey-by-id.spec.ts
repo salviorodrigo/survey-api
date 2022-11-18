@@ -17,8 +17,9 @@ describe('DbLoadPolls Usecase', () => {
 
   const makeLoadSurveyByIdRepositoryStub = (): LoadSurveyByIdRepository => {
     class LoadSurveyByIdRepositoryStub implements LoadSurveyByIdRepository {
-      async loadById (): Promise<SurveyModel> {
-        return await Promise.resolve(makeFakePolls()[0])
+      async loadById (id: string): Promise<SurveyModel> {
+        const thisResponse = makeFakePolls().filter(item => item.id === id)
+        return await Promise.resolve(thisResponse[0])
       }
     }
     return new LoadSurveyByIdRepositoryStub()
@@ -43,5 +44,12 @@ describe('DbLoadPolls Usecase', () => {
     const loadSpy = jest.spyOn(loadSurveyByIdRepositoryStub, 'loadById')
     await sut.loadById(makeFakePolls()[0].id)
     expect(loadSpy).toHaveBeenCalled()
+  })
+
+  test('Should return a survey on success', async () => {
+    const { sut } = makeSut()
+    const fakeSurvey = makeFakePolls()[0]
+    const thisResponse = await sut.loadById(fakeSurvey.id)
+    expect(thisResponse).toEqual(fakeSurvey)
   })
 })

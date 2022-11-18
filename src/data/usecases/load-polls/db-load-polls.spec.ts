@@ -34,21 +34,21 @@ describe('DbLoadPolls Usecase', () => {
 
   type SutTypes = {
     sut: DbLoadPolls
-    loadPollsRepositoyStub: LoadPollsRepository
+    loadPollsRepositoryStub: LoadPollsRepository
   }
 
   const makeSut = (): SutTypes => {
-    const loadPollsRepositoyStub = makeLoadPollsRepositoryStub()
-    const sut = new DbLoadPolls(loadPollsRepositoyStub)
+    const loadPollsRepositoryStub = makeLoadPollsRepositoryStub()
+    const sut = new DbLoadPolls(loadPollsRepositoryStub)
     return {
       sut,
-      loadPollsRepositoyStub
+      loadPollsRepositoryStub
     }
   }
 
   test('Should call LoadPollsRepository', async () => {
-    const { sut, loadPollsRepositoyStub } = makeSut()
-    const loadSpy = jest.spyOn(loadPollsRepositoyStub, 'loadAll')
+    const { sut, loadPollsRepositoryStub } = makeSut()
+    const loadSpy = jest.spyOn(loadPollsRepositoryStub, 'loadAll')
     await sut.load()
     expect(loadSpy).toHaveBeenCalled()
   })
@@ -60,8 +60,8 @@ describe('DbLoadPolls Usecase', () => {
   })
 
   test('Should throw if LoadPollsRepository throws', async () => {
-    const { sut, loadPollsRepositoyStub } = makeSut()
-    jest.spyOn(loadPollsRepositoyStub, 'loadAll').mockImplementationOnce(() => {
+    const { sut, loadPollsRepositoryStub } = makeSut()
+    jest.spyOn(loadPollsRepositoryStub, 'loadAll').mockImplementationOnce(() => {
       throw new Error()
     })
     const thisResponse = sut.load()

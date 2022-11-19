@@ -4,4 +4,5 @@ export type SurveyAnswerModel = {
   account_id: string
   answer: string
   image?: string
+  date: Date
 }

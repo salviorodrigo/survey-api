@@ -3,55 +3,55 @@ import { AddSurveyController } from './add-survey-controller'
 import { badRequest, serverError, noContent } from '@/presentation/helpers/http/http-helper'
 import MockDate from 'mockdate'
 
+const makeFakeRequest = (): HttpRequest => ({
+  body: {
+    question: 'any_question',
+    date: new Date()
+  }
+})
+
+const makeValidatorStub = (): Validator => {
+  class ValidatorStub implements Validator {
+    validate (input: any): Error | null {
+      return null
+    }
+  }
+  return new ValidatorStub()
+}
+
+const makeAddSurveyStub = (): AddSurvey => {
+  class AddSurveyStub implements AddSurvey {
+    async add (data: AddSurveyModel): Promise<void> {}
+  }
+  return new AddSurveyStub()
+}
+
+type SutTypes = {
+  sut: AddSurveyController
+  validatorStub: Validator
+  addSurveyStub: AddSurvey
+}
+
+const makeSut = (): SutTypes => {
+  const validatorStub = makeValidatorStub()
+  const addSurveyStub = makeAddSurveyStub()
+  const sut = new AddSurveyController(validatorStub, addSurveyStub)
+  return {
+    sut,
+    validatorStub,
+    addSurveyStub
+  }
+}
+
+beforeAll(() => {
+  MockDate.set(new Date())
+})
+
+afterAll(() => {
+  MockDate.reset()
+})
+
 describe('AddSurvey Controller', () => {
-  const makeFakeRequest = (): HttpRequest => ({
-    body: {
-      question: 'any_question',
-      date: new Date()
-    }
-  })
-
-  const makeValidatorStub = (): Validator => {
-    class ValidatorStub implements Validator {
-      validate (input: any): Error | null {
-        return null
-      }
-    }
-    return new ValidatorStub()
-  }
-
-  const makeAddSurveyStub = (): AddSurvey => {
-    class AddSurveyStub implements AddSurvey {
-      async add (data: AddSurveyModel): Promise<void> {}
-    }
-    return new AddSurveyStub()
-  }
-
-  type SutTypes = {
-    sut: AddSurveyController
-    validatorStub: Validator
-    addSurveyStub: AddSurvey
-  }
-
-  const makeSut = (): SutTypes => {
-    const validatorStub = makeValidatorStub()
-    const addSurveyStub = makeAddSurveyStub()
-    const sut = new AddSurveyController(validatorStub, addSurveyStub)
-    return {
-      sut,
-      validatorStub,
-      addSurveyStub
-    }
-  }
-
-  beforeAll(() => {
-    MockDate.set(new Date())
-  })
-
-  afterAll(() => {
-    MockDate.reset()
-  })
-
   test('Should call Validator with correct values', async () => {
     const { sut, validatorStub } = makeSut()
     const validateSyp = jest.spyOn(validatorStub, 'validate')

@@ -4,6 +4,14 @@ import { SurveyAnswerModel } from '@/domain/models/survey-answer'
 import { SaveSurveyAnswerModel } from '@/domain/usecases/save-survey-answer'
 import MockDate from 'mockdate'
 
+beforeAll(() => {
+  MockDate.set(new Date())
+})
+
+afterAll(() => {
+  MockDate.reset()
+})
+
 const makeFakeAddSurveyAnswerData = (): SaveSurveyAnswerModel => ({
   survey_id: 'valid_survey_id',
   account_id: 'account',
@@ -40,14 +48,6 @@ const makeSut = (): SutTypes => {
 }
 
 describe('DbSaveSurveyAnswer Usecase', () => {
-  beforeAll(() => {
-    MockDate.set(new Date())
-  })
-
-  afterAll(() => {
-    MockDate.reset()
-  })
-
   test('Should calls SaveSurveyAnswerRepository with correct value', async () => {
     const { sut, saveSurveyAnswerRepositoryStub } = makeSut()
     const saveSpy = jest.spyOn(saveSurveyAnswerRepositoryStub, 'save')

@@ -5,49 +5,50 @@ import {
 } from './db-load-polls-protocols'
 import MockDate from 'mockdate'
 
+beforeAll(() => {
+  MockDate.set(new Date())
+})
+
+afterAll(() => {
+  MockDate.reset()
+})
+
+const makeFakePolls = (): SurveyModel[] => {
+  return [{
+    id: 'any_id',
+    question: 'any_question',
+    date: new Date()
+  }, {
+    id: 'another_id',
+    question: 'another_question',
+    date: new Date()
+  }]
+}
+
+const makeLoadPollsRepositoryStub = (): LoadPollsRepository => {
+  class LoadPollsRepositoryStub implements LoadPollsRepository {
+    async loadAll (): Promise<SurveyModel[]> {
+      return await Promise.resolve(makeFakePolls())
+    }
+  }
+  return new LoadPollsRepositoryStub()
+}
+
+type SutTypes = {
+  sut: DbLoadPolls
+  loadPollsRepositoryStub: LoadPollsRepository
+}
+
+const makeSut = (): SutTypes => {
+  const loadPollsRepositoryStub = makeLoadPollsRepositoryStub()
+  const sut = new DbLoadPolls(loadPollsRepositoryStub)
+  return {
+    sut,
+    loadPollsRepositoryStub
+  }
+}
+
 describe('DbLoadPolls Usecase', () => {
-  beforeAll(() => {
-    MockDate.set(new Date())
-  })
-
-  afterAll(() => {
-    MockDate.reset()
-  })
-  const makeFakePolls = (): SurveyModel[] => {
-    return [{
-      id: 'any_id',
-      question: 'any_question',
-      date: new Date()
-    }, {
-      id: 'another_id',
-      question: 'another_question',
-      date: new Date()
-    }]
-  }
-
-  const makeLoadPollsRepositoryStub = (): LoadPollsRepository => {
-    class LoadPollsRepositoryStub implements LoadPollsRepository {
-      async loadAll (): Promise<SurveyModel[]> {
-        return await Promise.resolve(makeFakePolls())
-      }
-    }
-    return new LoadPollsRepositoryStub()
-  }
-
-  type SutTypes = {
-    sut: DbLoadPolls
-    loadPollsRepositoryStub: LoadPollsRepository
-  }
-
-  const makeSut = (): SutTypes => {
-    const loadPollsRepositoryStub = makeLoadPollsRepositoryStub()
-    const sut = new DbLoadPolls(loadPollsRepositoryStub)
-    return {
-      sut,
-      loadPollsRepositoryStub
-    }
-  }
-
   test('Should call LoadPollsRepository', async () => {
     const { sut, loadPollsRepositoryStub } = makeSut()
     const loadSpy = jest.spyOn(loadPollsRepositoryStub, 'loadAll')

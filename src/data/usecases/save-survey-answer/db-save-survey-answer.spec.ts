@@ -55,4 +55,11 @@ describe('DbSaveSurveyAnswer Usecase', () => {
     await sut.save(fakeAddSurveyAnswerData)
     expect(saveSpy).toHaveBeenCalledWith(fakeAddSurveyAnswerData)
   })
+
+  test('Should return SurveyAnswerModel on success', async () => {
+    const { sut } = makeSut()
+    const fakeAddSurveyAnswerData = makeFakeAddSurveyAnswerData()
+    const thisResponse = await sut.save(fakeAddSurveyAnswerData)
+    expect(thisResponse).toEqual(makeFakeSurveyAnswerData())
+  })
 })

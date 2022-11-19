@@ -70,4 +70,14 @@ describe('DbSaveSurveyAnswer Usecase', () => {
     const thisResponse = await sut.save(fakeAddSurveyAnswerData)
     expect(thisResponse).toBeNull()
   })
+
+  test('Should throw if SaveSurveyAnswerRepository throws', async () => {
+    const { sut, saveSurveyAnswerRepositoryStub } = makeSut()
+    jest.spyOn(saveSurveyAnswerRepositoryStub, 'save').mockImplementationOnce(() => {
+      throw new Error()
+    })
+    const fakeAddSurveyAnswerData = makeFakeAddSurveyAnswerData()
+    const thisResponse = sut.save(fakeAddSurveyAnswerData)
+    await expect(thisResponse).rejects.toThrow()
+  })
 })

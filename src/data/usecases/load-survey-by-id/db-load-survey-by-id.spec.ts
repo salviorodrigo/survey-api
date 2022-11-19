@@ -2,7 +2,7 @@ import { LoadSurveyByIdRepository } from '@/data/protocols/db/survey/load-survey
 import { SurveyModel } from '@/domain/models/survey'
 import { DbLoadSurveyById } from './db-load-survey-by-id'
 
-describe('DbLoadPolls Usecase', () => {
+describe('DbLoadSurveyById Usecase', () => {
   const makeFakePolls = (): SurveyModel[] => {
     return [{
       id: 'any_id',

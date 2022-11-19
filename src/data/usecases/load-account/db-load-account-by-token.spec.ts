@@ -1,7 +1,9 @@
 import { DbLoadAccountByToken } from './db-load-account-by-token'
-import { AccountModel } from '@/domain/models/account'
-import { LoadAccountByTokenRepository } from '@/data/protocols/db/account/load-account-by-token-repository'
-import { Decrypter } from '@/data/protocols/cryptography/decrypter'
+import {
+  AccountModel,
+  Decrypter,
+  LoadAccountByTokenRepository
+} from './db-load-account-by-token-protocols'
 
 describe('DbLoadAccountByToken Usecase', () => {
   const makeFakeAccessToken = (): any => ({

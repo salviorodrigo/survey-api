@@ -62,4 +62,12 @@ describe('DbSaveSurveyAnswer Usecase', () => {
     const thisResponse = await sut.save(fakeAddSurveyAnswerData)
     expect(thisResponse).toEqual(makeFakeSurveyAnswerData())
   })
+
+  test('Should return null if SaveSurveyAnswerRepository returns null', async () => {
+    const { sut, saveSurveyAnswerRepositoryStub } = makeSut()
+    jest.spyOn(saveSurveyAnswerRepositoryStub, 'save').mockResolvedValueOnce(null)
+    const fakeAddSurveyAnswerData = makeFakeAddSurveyAnswerData()
+    const thisResponse = await sut.save(fakeAddSurveyAnswerData)
+    expect(thisResponse).toBeNull()
+  })
 })

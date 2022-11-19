@@ -1,6 +1,9 @@
-import { SaveSurveyAnswerRepository } from '@/data/protocols/db/survey-answer/save-survey-answer-repository'
-import { SurveyAnswerModel } from '@/domain/models/survey-answer'
-import { SaveSurveyAnswer, SaveSurveyAnswerModel } from '@/domain/usecases/save-survey-answer'
+import {
+  SaveSurveyAnswerRepository,
+  SurveyAnswerModel,
+  SaveSurveyAnswer,
+  SaveSurveyAnswerModel
+} from './db-save-survey-answer-protocols'
 
 export class DbSaveSurveyAnswer implements SaveSurveyAnswer {
   constructor (private readonly saveSurveyAnswerRepository: SaveSurveyAnswerRepository) {}

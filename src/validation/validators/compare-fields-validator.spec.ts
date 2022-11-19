@@ -1,11 +1,11 @@
-import { CompareFieldValidator } from './compare-field-validator'
+import { CompareFieldsValidator } from './compare-fields-validator'
 import { InvalidParamError } from '@/presentation/errors'
 
-const makeSut = (): CompareFieldValidator => {
-  return new CompareFieldValidator('field', 'fieldConfirmation')
+const makeSut = (): CompareFieldsValidator => {
+  return new CompareFieldsValidator('field', 'fieldConfirmation')
 }
 
-describe('RequiredField Validator', () => {
+describe('CompareFields Validator', () => {
   test('Should return a InvalidParamError if validation fails', () => {
     const sut = makeSut()
     const thisResponse = sut.validate({

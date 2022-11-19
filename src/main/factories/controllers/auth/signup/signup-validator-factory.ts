@@ -1,6 +1,6 @@
 import { Validator } from '@/presentation/protocols'
 import { EmailValidatorAdapter } from '@/infra/validators/email-validator-adapter'
-import { ValidatorComposite, RequiredFieldValidator, CompareFieldValidator, EmailValidator } from '@/validation/validators'
+import { ValidatorComposite, RequiredFieldValidator, CompareFieldsValidator, EmailValidator } from '@/validation/validators'
 
 export const makeSignUpValidator = (): ValidatorComposite => {
   const validators: Validator[] = []
@@ -8,7 +8,7 @@ export const makeSignUpValidator = (): ValidatorComposite => {
     validators.push(new RequiredFieldValidator(field))
   }
 
-  validators.push(new CompareFieldValidator('password', 'passwordConfirmation'))
+  validators.push(new CompareFieldsValidator('password', 'passwordConfirmation'))
   validators.push(new EmailValidator('email', new EmailValidatorAdapter()))
 
   return new ValidatorComposite(validators)

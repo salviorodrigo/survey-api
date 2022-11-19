@@ -1,6 +1,6 @@
 import { makeSignUpValidator } from './signup-validator-factory'
 import { Validator } from '@/presentation/protocols'
-import { ValidatorComposite, RequiredFieldValidator, CompareFieldValidator, EmailValidator } from '@/validation/validators'
+import { ValidatorComposite, RequiredFieldValidator, CompareFieldsValidator, EmailValidator } from '@/validation/validators'
 import { EmailValidator as EmailValidatorInterface } from '@/validation/protocols/email-validator'
 
 jest.mock('@/validation/validators/validator-composite')
@@ -23,7 +23,7 @@ describe('SignUpValidator Factory', () => {
       validators.push(new RequiredFieldValidator(field))
     }
 
-    validators.push(new CompareFieldValidator('password', 'passwordConfirmation'))
+    validators.push(new CompareFieldsValidator('password', 'passwordConfirmation'))
     validators.push(new EmailValidator('email', makeEmailValidator()))
 
     expect(ValidatorComposite).toHaveBeenCalledWith(validators)

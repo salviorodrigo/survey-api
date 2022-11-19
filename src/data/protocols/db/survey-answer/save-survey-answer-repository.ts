@@ -1,5 +1,6 @@
-import { SaveSurveyAnswer, SaveSurveyAnswerModel } from '@/domain/usecases/save-survey-answer'
+import { SurveyAnswerModel } from '@/domain/models/survey-answer'
+import { SaveSurveyAnswerModel } from '@/domain/usecases/save-survey-answer'
 
 export interface SaveSurveyAnswerRepository {
-  add (surveyAnswerData: SaveSurveyAnswer): Promise<SaveSurveyAnswerModel>
+  save (surveyAnswerData: SaveSurveyAnswerModel): Promise<SurveyAnswerModel>
 }

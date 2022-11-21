@@ -1,5 +1,9 @@
 import { DbAddSurvey } from './db-add-survey'
-import { AddSurveyModel, AddSurveyRepository } from './db-add-survey-protocols'
+import {
+  AddSurveyModel,
+  AddSurveyRepository,
+  SurveyAnswerOptionModel
+} from './db-add-survey-protocols'
 import MockDate from 'mockdate'
 
 beforeAll(() => {
@@ -10,8 +14,18 @@ afterAll(() => {
   MockDate.reset()
 })
 
+const makeFakeSurveyAnswerOptions = (): SurveyAnswerOptionModel[] => {
+  return [{
+    answer: 'any_answer',
+    imagePath: 'https://image.path/locale.jpg'
+  }, {
+    answer: 'another_answer'
+  }]
+}
+
 const makeFakeSurveyData = (): AddSurveyModel => ({
   question: 'any_question',
+  answerOptions: makeFakeSurveyAnswerOptions(),
   date: new Date()
 })
 

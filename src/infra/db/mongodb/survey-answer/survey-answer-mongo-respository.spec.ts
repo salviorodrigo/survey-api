@@ -1,5 +1,5 @@
 import { SurveyAnswerMongoRepository } from './survey-answer-mongo-repository'
-import { SaveSurveyAnswerModel } from '@/domain/usecases/save-survey-answer'
+import { SaveSurveyAnswerModel } from '@/domain/usecases/survey-answer/save-survey-answer'
 import { AccountModel } from '@/domain/models/account'
 import { SurveyModel } from '@/domain/models/survey'
 import { MongoHelper } from '@/infra/db/mongodb/helpers/mongo-helper'

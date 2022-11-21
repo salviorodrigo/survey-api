@@ -2,7 +2,7 @@ import {
   SaveSurveyAnswerModel,
   SaveSurveyAnswerRepository,
   SurveyAnswerModel
-} from '@/data/usecases/save-survey-answer/db-save-survey-answer-protocols'
+} from '@/data/usecases/survey-answer/save-survey-answer/db-save-survey-answer-protocols'
 import { MongoHelper } from '../helpers/mongo-helper'
 
 export class SurveyAnswerMongoRepository implements SaveSurveyAnswerRepository {

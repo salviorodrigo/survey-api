@@ -1,6 +1,6 @@
 import { DbAddAccount } from './db-add-account'
 import { Hasher, AddAccountRepository, LoadAccountByEmailRepository } from './db-add-account-protocols'
-import { AddAccountModel } from '@/domain/usecases/add-account'
+import { AddAccountModel } from '@/domain/usecases/account/add-account'
 import { AccountModel } from '@/domain/models/account'
 
 const makeFakeAccountData = (): AddAccountModel => ({

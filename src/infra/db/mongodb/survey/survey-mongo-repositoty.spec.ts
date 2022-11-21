@@ -65,6 +65,7 @@ describe('Survey Mongo Repository', () => {
       const polls = await sut.loadAll()
 
       expect(polls.length).toBe(2)
+      expect(polls[0].id).toBeTruthy()
     })
 
     test('Should load empty list', async () => {

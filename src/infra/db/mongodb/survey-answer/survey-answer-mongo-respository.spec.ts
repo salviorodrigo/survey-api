@@ -5,6 +5,7 @@ import { SurveyModel } from '@/domain/models/survey'
 import { MongoHelper } from '@/infra/db/mongodb/helpers/mongo-helper'
 import MockDate from 'mockdate'
 import { Collection } from 'mongodb'
+import { SurveyAnswerModel } from '@/domain/models/survey-answer'
 
 let accountCollection: Collection
 let surveyCollection: Collection
@@ -63,6 +64,14 @@ const makeFakeSurveyAnswerData = async (): Promise<SaveSurveyAnswerModel> => {
   }
 }
 
+const createFakeSurveyAnswer = async (surveyAnswerData: SaveSurveyAnswerModel): Promise<SurveyAnswerModel> => {
+  return MongoHelper.map(await (
+    await surveyAnswerCollection.insertOne(
+      Object.assign({}, surveyAnswerData, { date: new Date() })
+    )
+  ).ops[0])
+}
+
 const makeSut = (): SurveyAnswerMongoRepository => {
   return new SurveyAnswerMongoRepository()
 }
@@ -70,10 +79,26 @@ const makeSut = (): SurveyAnswerMongoRepository => {
 describe('SurveyAnswer Mongo Repository', () => {
   test('Should add a survey answer if her is new', async () => {
     const sut = makeSut()
+
     const fakeSurveyAnswerData = await makeFakeSurveyAnswerData()
     const surveyAnswer = await sut.save(fakeSurveyAnswerData)
+
     expect(surveyAnswer).toBeTruthy()
     expect(surveyAnswer.id).toBeTruthy()
+    expect(surveyAnswer.account_id).toEqual(fakeSurveyAnswerData.account_id)
+    expect(surveyAnswer.survey_id).toEqual(fakeSurveyAnswerData.survey_id)
+    expect(surveyAnswer.answer).toEqual(fakeSurveyAnswerData.answer)
+  })
+
+  test('Should update a survey answer if her isn\'t new', async () => {
+    const sut = makeSut()
+
+    const fakeSurveyAnswerData = await makeFakeSurveyAnswerData()
+    const fakeSurveyAnswer = await createFakeSurveyAnswer(fakeSurveyAnswerData)
+    const surveyAnswer = await sut.save(fakeSurveyAnswerData)
+
+    expect(surveyAnswer).toBeTruthy()
+    expect(surveyAnswer.id).toEqual(fakeSurveyAnswer.id)
     expect(surveyAnswer.account_id).toEqual(fakeSurveyAnswerData.account_id)
     expect(surveyAnswer.survey_id).toEqual(fakeSurveyAnswerData.survey_id)
     expect(surveyAnswer.answer).toEqual(fakeSurveyAnswerData.answer)

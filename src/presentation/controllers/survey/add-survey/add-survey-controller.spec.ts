@@ -1,11 +1,35 @@
-import { Validator, HttpRequest, AddSurvey, AddSurveyModel } from './add-survey-protocols'
 import { AddSurveyController } from './add-survey-controller'
+import {
+  Validator,
+  HttpRequest,
+  AddSurvey,
+  AddSurveyModel,
+  SurveyAnswerOptionModel
+} from './add-survey-controller-protocols'
 import { badRequest, serverError, noContent } from '@/presentation/helpers/http/http-helper'
 import MockDate from 'mockdate'
+
+beforeAll(() => {
+  MockDate.set(new Date())
+})
+
+afterAll(() => {
+  MockDate.reset()
+})
+
+const makeFakeSurveyAnswerOptions = (): SurveyAnswerOptionModel[] => {
+  return [{
+    answer: 'any_answer',
+    imagePath: 'https://image.path/locale.jpg'
+  }, {
+    answer: 'another_answer'
+  }]
+}
 
 const makeFakeRequest = (): HttpRequest => ({
   body: {
     question: 'any_question',
+    answerOptions: makeFakeSurveyAnswerOptions(),
     date: new Date()
   }
 })
@@ -42,14 +66,6 @@ const makeSut = (): SutTypes => {
     addSurveyStub
   }
 }
-
-beforeAll(() => {
-  MockDate.set(new Date())
-})
-
-afterAll(() => {
-  MockDate.reset()
-})
 
 describe('AddSurvey Controller', () => {
   test('Should call Validator with correct values', async () => {

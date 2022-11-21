@@ -3,7 +3,7 @@ import { ValidatorComposite, RequiredFieldValidator } from '@/validation/validat
 
 export const makeAddSurveyValidator = (): ValidatorComposite => {
   const validators: Validator[] = []
-  for (const field of ['question']) {
+  for (const field of ['question', 'answerOptions']) {
     validators.push(new RequiredFieldValidator(field))
   }
 

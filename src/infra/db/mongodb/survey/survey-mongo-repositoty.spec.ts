@@ -1,5 +1,6 @@
 import { SurveyMongoRepository } from './survey-mongo-repository'
 import { AddSurveyModel } from '@/domain/usecases/add-survey'
+import { SurveyAnswerOptionModel } from '@/domain/models/survey'
 import { MongoHelper } from '@/infra/db/mongodb/helpers/mongo-helper'
 import { Collection } from 'mongodb'
 import MockDate from 'mockdate'
@@ -21,8 +22,18 @@ beforeEach(async () => {
   await surveyCollection.deleteMany({})
 })
 
+const makeFakeSurveyAnswerOptions = (): SurveyAnswerOptionModel[] => {
+  return [{
+    answer: 'any_answer',
+    imagePath: 'https://image.path/locale.jpg'
+  }, {
+    answer: 'another_answer'
+  }]
+}
+
 const makeFakeSurveyData = (): AddSurveyModel => ({
   question: 'any_question',
+  answerOptions: makeFakeSurveyAnswerOptions(),
   date: new Date()
 })
 

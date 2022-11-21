@@ -1,4 +1,5 @@
 import { AddSurveyModel } from '@/domain/usecases/add-survey'
+import { SurveyAnswerOptionModel } from '@/domain/models/survey'
 import { MongoHelper } from '@/infra/db/mongodb/helpers/mongo-helper'
 import app from '@/main/config/app'
 import env from '@/main/config/env'
@@ -44,8 +45,18 @@ const makeAccessToken = async (): Promise<string> => {
   return accessToken
 }
 
+const makeFakeSurveyAnswerOptions = (): SurveyAnswerOptionModel[] => {
+  return [{
+    answer: 'any_answer',
+    imagePath: 'https://image.path/locale.jpg'
+  }, {
+    answer: 'another_answer'
+  }]
+}
+
 const makeFakeSurveyData = (): AddSurveyModel => ({
   question: 'any_question',
+  answerOptions: makeFakeSurveyAnswerOptions(),
   date: new Date()
 })
 

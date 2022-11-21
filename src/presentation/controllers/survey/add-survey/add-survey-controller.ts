@@ -1,4 +1,4 @@
-import { Validator, HttpRequest, AddSurvey, Controller, HttpResponse } from './add-survey-protocols'
+import { Validator, HttpRequest, AddSurvey, Controller, HttpResponse } from './add-survey-controller-protocols'
 import { badRequest, serverError, noContent } from '@/presentation/helpers/http/http-helper'
 
 export class AddSurveyController implements Controller {
@@ -22,11 +22,12 @@ export class AddSurveyController implements Controller {
         }
       }
 
-      const { question } = httpRequest.body
+      const { question, answerOptions } = httpRequest.body
 
       if (!thisResponse.filled) {
         await this.addSurvey.add({
           question,
+          answerOptions,
           date: new Date()
         })
         thisResponse.data = noContent()

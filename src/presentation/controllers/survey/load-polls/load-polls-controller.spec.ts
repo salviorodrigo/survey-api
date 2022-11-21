@@ -1,16 +1,39 @@
-import { SurveyModel, LoadPolls } from './load-polls-protocols'
 import { LoadPollsController } from './load-polls-controller'
+import {
+  SurveyModel,
+  LoadPolls,
+  SurveyAnswerOptionModel
+} from './load-polls-controller-protocols'
 import { noContent, ok, serverError } from '@/presentation/helpers/http/http-helper'
 import MockDate from 'mockdate'
+
+beforeAll(() => {
+  MockDate.set(new Date())
+})
+
+afterAll(() => {
+  MockDate.reset()
+})
+
+const makeFakeSurveyAnswerOptions = (): SurveyAnswerOptionModel[] => {
+  return [{
+    answer: 'any_answer',
+    imagePath: 'https://image.path/locale.jpg'
+  }, {
+    answer: 'another_answer'
+  }]
+}
 
 const makeFakePolls = (): SurveyModel[] => {
   return [{
     id: 'any_id',
     question: 'any_question',
+    answerOptions: makeFakeSurveyAnswerOptions(),
     date: new Date()
   }, {
     id: 'another_id',
     question: 'another_question',
+    answerOptions: makeFakeSurveyAnswerOptions(),
     date: new Date()
   }]
 }
@@ -37,14 +60,6 @@ const makeSut = (): SutTypes => {
     loadPollsStub
   }
 }
-
-beforeAll(() => {
-  MockDate.set(new Date())
-})
-
-afterAll(() => {
-  MockDate.reset()
-})
 
 describe('LoadPolls Controller', () => {
   test('Should call LoadPolls', async () => {

@@ -1,7 +1,8 @@
 import { DbLoadPolls } from './db-load-polls'
 import {
   SurveyModel,
-  LoadPollsRepository
+  LoadPollsRepository,
+  SurveyAnswerOptionModel
 } from './db-load-polls-protocols'
 import MockDate from 'mockdate'
 
@@ -13,14 +14,25 @@ afterAll(() => {
   MockDate.reset()
 })
 
+const makeFakeSurveyAnswerOptions = (): SurveyAnswerOptionModel[] => {
+  return [{
+    answer: 'any_answer',
+    imagePath: 'https://image.path/locale.jpg'
+  }, {
+    answer: 'another_answer'
+  }]
+}
+
 const makeFakePolls = (): SurveyModel[] => {
   return [{
     id: 'any_id',
     question: 'any_question',
+    answerOptions: makeFakeSurveyAnswerOptions(),
     date: new Date()
   }, {
     id: 'another_id',
     question: 'another_question',
+    answerOptions: makeFakeSurveyAnswerOptions(),
     date: new Date()
   }]
 }

@@ -40,21 +40,22 @@ const makeFakeSurveyData = (): AddSurveyModel => ({
 const makeSut = (): SurveyMongoRepository => {
   return new SurveyMongoRepository()
 }
-describe('add()', () => {
-  test('Should add survey on success ', async () => {
-    const sut = makeSut()
-    const fakeSurveyData = makeFakeSurveyData()
-    await sut.add(fakeSurveyData)
-    const survey = await surveyCollection.findOne({
-      question: fakeSurveyData.question
-    })
-
-    expect(survey).toBeTruthy()
-  })
-})
 
 describe('Survey Mongo Repository', () => {
-  describe('loadALl()', () => {
+  describe('add()', () => {
+    test('Should add survey on success ', async () => {
+      const sut = makeSut()
+      const fakeSurveyData = makeFakeSurveyData()
+      await sut.add(fakeSurveyData)
+      const survey = await surveyCollection.findOne({
+        question: fakeSurveyData.question
+      })
+
+      expect(survey).toBeTruthy()
+    })
+  })
+
+  describe('loadAll()', () => {
     test('Should load all polls on success ', async () => {
       await surveyCollection.insertMany([
         makeFakeSurveyData(),
@@ -71,6 +72,22 @@ describe('Survey Mongo Repository', () => {
       const polls = await sut.loadAll()
 
       expect(polls.length).toBe(0)
+    })
+  })
+
+  describe('loadById()', () => {
+    test('Should load a survey on success ', async () => {
+      const fakeSurvey = makeFakeSurveyData()
+      const id = await (
+        await surveyCollection.insertOne(fakeSurvey)
+      ).ops[0]._id
+      const sut = makeSut()
+      const survey = await sut.loadById(id)
+
+      expect(survey.id).toBeTruthy()
+      expect(survey.question).toEqual(fakeSurvey.question)
+      expect(survey.answerOptions).toEqual(fakeSurvey.answerOptions)
+      expect(survey.date).toEqual(fakeSurvey.date)
     })
   })
 })

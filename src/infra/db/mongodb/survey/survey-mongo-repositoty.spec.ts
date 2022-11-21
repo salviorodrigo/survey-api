@@ -76,7 +76,7 @@ describe('Survey Mongo Repository', () => {
   })
 
   describe('loadById()', () => {
-    test('Should load a survey on success ', async () => {
+    test('Should load a survey on success', async () => {
       const fakeSurvey = makeFakeSurveyData()
       const id = await (
         await surveyCollection.insertOne(fakeSurvey)
@@ -88,6 +88,13 @@ describe('Survey Mongo Repository', () => {
       expect(survey.question).toEqual(fakeSurvey.question)
       expect(survey.answerOptions).toEqual(fakeSurvey.answerOptions)
       expect(survey.date).toEqual(fakeSurvey.date)
+    })
+
+    test('Should return null if survey.id doesn\'t exists', async () => {
+      const sut = makeSut()
+      const survey = await sut.loadById('invalid_id')
+
+      expect(survey).toBeNull()
     })
   })
 })

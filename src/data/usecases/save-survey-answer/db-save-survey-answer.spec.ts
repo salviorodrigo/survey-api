@@ -17,12 +17,11 @@ afterAll(() => {
 const makeFakeAddSurveyAnswerData = (): SaveSurveyAnswerModel => ({
   survey_id: 'valid_survey_id',
   account_id: 'account',
-  answer: 'any_answer',
-  date: new Date()
+  answer: 'any_answer'
 })
 
 const makeFakeSurveyAnswerData = (): SurveyAnswerModel => (
-  Object.assign({}, makeFakeAddSurveyAnswerData(), { id: 'valid_id' })
+  Object.assign({}, makeFakeAddSurveyAnswerData(), { id: 'valid_id', date: new Date() })
 )
 
 const makeSaveSurveyAnswerRepositoryStub = (): SaveSurveyAnswerRepository => {

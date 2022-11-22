@@ -1,10 +1,12 @@
 import { SurveyAnswerMongoRepository } from './survey-answer-mongo-repository'
-import { SaveSurveyAnswerModel } from '@/domain/usecases/survey-answer/save-survey-answer'
-import { AccountModel } from '@/domain/models/account'
-import { SurveyModel } from '@/domain/models/survey'
+import {
+  SaveSurveyAnswerModel,
+  AccountModel,
+  SurveyModel
+} from './survey-answer-mongo-repository-protocols'
 import { MongoHelper } from '@/infra/db/mongodb/helpers/mongo-helper'
-import MockDate from 'mockdate'
 import { Collection } from 'mongodb'
+import MockDate from 'mockdate'
 import { SurveyAnswerModel } from '@/domain/models/survey-answer'
 
 let accountCollection: Collection

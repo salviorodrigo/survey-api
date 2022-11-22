@@ -1,6 +1,8 @@
 import { SurveyMongoRepository } from './survey-mongo-repository'
-import { AddSurveyModel } from '@/domain/usecases/survey/add-survey'
-import { SurveyAnswerOptionModel } from '@/domain/models/survey'
+import {
+  AddSurveyModel,
+  SurveyAnswerOptionModel
+} from './survey-mongo-repository-protocols'
 import { MongoHelper } from '@/infra/db/mongodb/helpers/mongo-helper'
 import { Collection } from 'mongodb'
 import MockDate from 'mockdate'

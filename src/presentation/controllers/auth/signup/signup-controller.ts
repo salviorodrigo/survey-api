@@ -1,4 +1,11 @@
-import { HttpRequest, HttpResponse, Controller, AddAccount, Validator, Authenticator } from './signup-controller-protocols'
+import {
+  HttpRequest,
+  HttpResponse,
+  Controller,
+  AddAccount,
+  Validator,
+  Authenticator
+} from './signup-controller-protocols'
 import { EmailTakenError } from '@/presentation/errors/email-taken-error'
 import { badRequest, serverError, ok, forbidden } from '@/presentation/helpers/http/http-helper'
 

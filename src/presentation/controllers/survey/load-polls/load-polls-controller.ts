@@ -1,4 +1,9 @@
-import { Controller, HttpRequest, HttpResponse, LoadPolls } from './load-polls-controller-protocols'
+import {
+  Controller,
+  HttpRequest,
+  HttpResponse,
+  LoadPolls
+} from './load-polls-controller-protocols'
 import { noContent, ok, serverError } from '@/presentation/helpers/http/http-helper'
 
 export class LoadPollsController implements Controller {

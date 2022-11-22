@@ -1,5 +1,13 @@
 import { SignUpController } from './signup-controller'
-import { AddAccount, AddAccountModel, AccountModel, Validator, HttpRequest, Authenticator, AuthenticatorModel } from './signup-controller-protocols'
+import {
+  AddAccount,
+  AddAccountModel,
+  AccountModel,
+  Validator,
+  HttpRequest,
+  Authenticator,
+  AuthenticatorModel
+} from './signup-controller-protocols'
 import { MissingParamError, EmailTakenError } from '@/presentation/errors'
 import { ok, badRequest, serverError, forbidden } from '@/presentation/helpers/http/http-helper'
 

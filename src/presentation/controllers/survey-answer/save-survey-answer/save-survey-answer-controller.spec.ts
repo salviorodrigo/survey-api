@@ -116,4 +116,12 @@ describe('SaveSurveyAnswer Controller', () => {
     const thisResponse = await sut.handle(fakeRequest)
     expect(thisResponse).toEqual(serverError(new Error()))
   })
+
+  test('Should returns 400 if an invalid answer is provided', async () => {
+    const { sut } = makeSut()
+    const fakeRequest = makeFakeRequest()
+    fakeRequest.params = Object.assign({}, fakeRequest.params, { answer: 'invalid_answer' })
+    const thisResponse = await sut.handle(fakeRequest)
+    expect(thisResponse).toEqual(badRequest(new InvalidParamError('answer')))
+  })
 })

@@ -1,5 +1,5 @@
 import { InvalidParamError } from '@/presentation/errors'
-import { badRequest, ok } from '@/presentation/helpers/http/http-helper'
+import { badRequest, ok, serverError } from '@/presentation/helpers/http/http-helper'
 import {
   Controller,
   HttpRequest,
@@ -18,15 +18,20 @@ export class LoadSurveyByIdController implements Controller {
       data: null
     }
 
-    const { surveyId } = httpRequest.body
-    const survey = await this.surveyLoader.loadById(surveyId)
+    try {
+      const { surveyId } = httpRequest.body
+      const survey = await this.surveyLoader.loadById(surveyId)
 
-    if (!thisResponse.filled) {
-      if (survey) {
-        thisResponse.data = ok(survey)
-      } else {
-        thisResponse.data = badRequest(new InvalidParamError('surveyId'))
+      if (!thisResponse.filled) {
+        if (survey) {
+          thisResponse.data = ok(survey)
+        } else {
+          thisResponse.data = badRequest(new InvalidParamError('surveyId'))
+        }
+        thisResponse.filled = true
       }
+    } catch (error) {
+      thisResponse.data = serverError(error)
       thisResponse.filled = true
     }
 

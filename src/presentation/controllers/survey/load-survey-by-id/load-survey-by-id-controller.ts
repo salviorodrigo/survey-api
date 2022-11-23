@@ -1,3 +1,4 @@
+import { ok } from '@/presentation/helpers/http/http-helper'
 import {
   Controller,
   HttpRequest,
@@ -19,7 +20,11 @@ export class LoadSurveyByIdController implements Controller {
     const { surveyId } = httpRequest.body
 
     if (!thisResponse.filled) {
-      await this.surveyLoader.loadById(surveyId)
+      const survey = await this.surveyLoader.loadById(surveyId)
+      if (survey) {
+        thisResponse.data = ok(survey)
+        thisResponse.filled = true
+      }
     }
 
     return await Promise.resolve(thisResponse.data)

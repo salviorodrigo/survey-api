@@ -1,3 +1,4 @@
+import { serverError } from '@/presentation/helpers/http/http-helper'
 import {
   Controller,
   HttpRequest,
@@ -11,7 +12,16 @@ export class SaveSurveyAnswerController implements Controller {
   ) {}
 
   async handle (httpRequest: HttpRequest): Promise<HttpResponse> {
-    await this.surveyLoader.loadById(httpRequest.params.surveyId)
-    return null
+    const thisResponse = {
+      filled: false,
+      data: null
+    }
+    try {
+      await this.surveyLoader.loadById(httpRequest.params.surveyId)
+    } catch (error) {
+      thisResponse.data = serverError(error)
+      thisResponse.filled = true
+    }
+    return thisResponse.data
   }
 }

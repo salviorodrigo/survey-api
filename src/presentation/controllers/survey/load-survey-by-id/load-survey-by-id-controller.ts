@@ -4,12 +4,14 @@ import {
   Controller,
   HttpRequest,
   HttpResponse,
-  LoadSurveyById
+  LoadSurveyById,
+  Validator
 } from './load-survey-by-id-controller-protocols'
 
 export class LoadSurveyByIdController implements Controller {
   constructor (
-    private readonly surveyLoader: LoadSurveyById
+    private readonly surveyLoader: LoadSurveyById,
+    private readonly validator: Validator
   ) {}
 
   async handle (httpRequest: HttpRequest): Promise<HttpResponse> {
@@ -19,6 +21,14 @@ export class LoadSurveyByIdController implements Controller {
     }
 
     try {
+      if (!thisResponse.filled) {
+        const validatorErrorBag = this.validator.validate(httpRequest.body)
+        if (validatorErrorBag) {
+          thisResponse.data = badRequest(validatorErrorBag)
+          thisResponse.filled = true
+        }
+      }
+
       const { surveyId } = httpRequest.body
       const survey = await this.surveyLoader.loadById(surveyId)
 

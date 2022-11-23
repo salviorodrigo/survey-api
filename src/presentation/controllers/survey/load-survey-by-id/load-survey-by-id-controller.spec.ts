@@ -3,7 +3,8 @@ import {
   HttpRequest,
   LoadSurveyById,
   SurveyAnswerOptionModel,
-  SurveyModel
+  SurveyModel,
+  Validator
 } from './load-survey-by-id-controller-protocols'
 import MockDate from 'mockdate'
 import { badRequest, ok, serverError } from '@/presentation/helpers/http/http-helper'
@@ -39,6 +40,15 @@ const makeFakeSurvey = (): SurveyModel => ({
   date: new Date()
 })
 
+const makeValidatorStub = (): Validator => {
+  class ValidatorStub implements Validator {
+    validate (input: any): Error | null {
+      return null
+    }
+  }
+  return new ValidatorStub()
+}
+
 const makeLoadSurveyByIdStub = (): LoadSurveyById => {
   class LoadSurveyByIdStub implements LoadSurveyById {
     async loadById (id: string): Promise<SurveyModel | null> {
@@ -50,19 +60,30 @@ const makeLoadSurveyByIdStub = (): LoadSurveyById => {
 
 type SutTypes = {
   sut: LoadSurveyByIdController
+  validatorStub: Validator
   surveyLoaderStub: LoadSurveyById
 }
 
 const makeSut = (): SutTypes => {
+  const validatorStub = makeValidatorStub()
   const surveyLoaderStub = makeLoadSurveyByIdStub()
-  const sut = new LoadSurveyByIdController(surveyLoaderStub)
+  const sut = new LoadSurveyByIdController(surveyLoaderStub, validatorStub)
   return {
     sut,
+    validatorStub,
     surveyLoaderStub
   }
 }
 
 describe('LoadSurveyById Controller', () => {
+  test('Should call Validator with correct values', async () => {
+    const { sut, validatorStub } = makeSut()
+    const validateSyp = jest.spyOn(validatorStub, 'validate')
+    const httpRequest = makeFakeRequest()
+    await sut.handle(httpRequest)
+    expect(validateSyp).toHaveBeenCalledWith(httpRequest.body)
+  })
+
   test('Should call LoadSurveyById with correct values', async () => {
     const { sut, surveyLoaderStub } = makeSut()
     const loadSpy = jest.spyOn(surveyLoaderStub, 'loadById')
@@ -72,14 +93,14 @@ describe('LoadSurveyById Controller', () => {
     expect(loadSpy).toHaveBeenCalledWith(fakeRequestData.body.surveyId)
   })
 
-  test('Should returns a survey on success', async () => {
+  test('Should returns 200 on success', async () => {
     const { sut } = makeSut()
     const thisResponse = await sut.handle(makeFakeRequest())
 
     expect(thisResponse).toEqual(ok(makeFakeSurvey()))
   })
 
-  test('Should returns an error if LoadSurveyById returns null', async () => {
+  test('Should returns 400 if LoadSurveyById returns null', async () => {
     const { sut, surveyLoaderStub } = makeSut()
     jest.spyOn(surveyLoaderStub, 'loadById').mockResolvedValueOnce(null)
     const thisResponse = await sut.handle(makeFakeRequest())
@@ -87,7 +108,7 @@ describe('LoadSurveyById Controller', () => {
     expect(thisResponse).toEqual(badRequest(new InvalidParamError('surveyId')))
   })
 
-  test('Should returns an serveError if LoadSurveyById throws', async () => {
+  test('Should returns an 500 if LoadSurveyById throws', async () => {
     const { sut, surveyLoaderStub } = makeSut()
     jest.spyOn(surveyLoaderStub, 'loadById').mockRejectedValueOnce(new Error())
     const thisResponse = await sut.handle(makeFakeRequest())

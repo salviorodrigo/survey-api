@@ -150,10 +150,18 @@ describe('SaveSurveyAnswer Controller', () => {
     expect(thisResponse).toEqual(badRequest(new InvalidParamError('answer')))
   })
 
-  test('Should call surveyAnswerSaver with correct values', async () => {
+  test('Should call SaveSurveyAnswer with correct values', async () => {
     const { sut, surveyAnswerSaverStub } = makeSut()
     const loadSpy = jest.spyOn(surveyAnswerSaverStub, 'save')
     await sut.handle(makeFakeRequest())
     expect(loadSpy).toHaveBeenCalledWith(makeFakeSaveSurveyAnswer())
+  })
+
+  test('Should returns 500 if SaveSurveyAnswer throws', async () => {
+    const { sut, surveyAnswerSaverStub } = makeSut()
+    jest.spyOn(surveyAnswerSaverStub, 'save').mockRejectedValueOnce(new Error())
+    const fakeRequest = makeFakeRequest()
+    const thisResponse = await sut.handle(fakeRequest)
+    expect(thisResponse).toEqual(serverError(new Error()))
   })
 })

@@ -6,7 +6,8 @@ import {
   SurveyModel
 } from './load-survey-by-id-controller-protocols'
 import MockDate from 'mockdate'
-import { ok } from '@/presentation/helpers/http/http-helper'
+import { badRequest, ok, serverError } from '@/presentation/helpers/http/http-helper'
+import { InvalidParamError } from '@/presentation/errors'
 
 beforeAll(() => {
   MockDate.set(new Date())
@@ -40,7 +41,7 @@ const makeFakeSurvey = (): SurveyModel => ({
 
 const makeLoadSurveyByIdStub = (): LoadSurveyById => {
   class LoadSurveyByIdStub implements LoadSurveyById {
-    async loadById (id: string): Promise<SurveyModel> {
+    async loadById (id: string): Promise<SurveyModel | null> {
       return await Promise.resolve(makeFakeSurvey())
     }
   }
@@ -76,5 +77,21 @@ describe('LoadSurveyById Controller', () => {
     const thisResponse = await sut.handle(makeFakeRequest())
 
     expect(thisResponse).toEqual(ok(makeFakeSurvey()))
+  })
+
+  test('Should returns an error if LoadSurveyById returns null', async () => {
+    const { sut, surveyLoaderStub } = makeSut()
+    jest.spyOn(surveyLoaderStub, 'loadById').mockResolvedValueOnce(null)
+    const thisResponse = await sut.handle(makeFakeRequest())
+
+    expect(thisResponse).toEqual(badRequest(new InvalidParamError('surveyId')))
+  })
+
+  test('Should returns an serveError if LoadSurveyById throws', async () => {
+    const { sut, surveyLoaderStub } = makeSut()
+    jest.spyOn(surveyLoaderStub, 'loadById').mockRejectedValueOnce(new Error())
+    const thisResponse = await sut.handle(makeFakeRequest())
+
+    expect(thisResponse).toEqual(serverError(new Error()))
   })
 })

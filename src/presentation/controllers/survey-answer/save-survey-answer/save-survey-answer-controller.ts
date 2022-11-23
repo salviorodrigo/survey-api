@@ -7,7 +7,7 @@ import {
   SaveSurveyAnswer
 } from './save-survey-answer-controller-protocols'
 import { InvalidParamError } from '@/presentation/errors'
-import { badRequest, serverError } from '@/presentation/helpers/http/http-helper'
+import { ok, badRequest, serverError } from '@/presentation/helpers/http/http-helper'
 
 export class SaveSurveyAnswerController implements Controller {
   constructor (
@@ -48,11 +48,13 @@ export class SaveSurveyAnswerController implements Controller {
       }
 
       if (!thisResponse.filled) {
-        await this.surveyAnswerSaver.save({
+        const surveyAnswer = await this.surveyAnswerSaver.save({
           surveyId,
           accountId,
           answer
         })
+        thisResponse.data = ok(surveyAnswer)
+        thisResponse.filled = true
       }
     } catch (error) {
       thisResponse.data = serverError(error)

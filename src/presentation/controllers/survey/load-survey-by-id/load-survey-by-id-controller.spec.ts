@@ -19,7 +19,7 @@ afterAll(() => {
 })
 
 const makeFakeRequest = (): HttpRequest => ({
-  body: {
+  params: {
     surveyId: 'valid_id'
   }
 })
@@ -81,7 +81,7 @@ describe('LoadSurveyById Controller', () => {
     const validateSyp = jest.spyOn(validatorStub, 'validate')
     const httpRequest = makeFakeRequest()
     await sut.handle(httpRequest)
-    expect(validateSyp).toHaveBeenCalledWith(httpRequest.body)
+    expect(validateSyp).toHaveBeenCalledWith(httpRequest.params)
   })
 
   test('Should return 400 if Validator fails', async () => {
@@ -98,7 +98,7 @@ describe('LoadSurveyById Controller', () => {
     const fakeRequestData = makeFakeRequest()
     await sut.handle(fakeRequestData)
 
-    expect(loadSpy).toHaveBeenCalledWith(fakeRequestData.body.surveyId)
+    expect(loadSpy).toHaveBeenCalledWith(fakeRequestData.params.surveyId)
   })
 
   test('Should returns 200 on success', async () => {

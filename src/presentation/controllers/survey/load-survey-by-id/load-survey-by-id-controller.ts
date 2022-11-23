@@ -22,14 +22,14 @@ export class LoadSurveyByIdController implements Controller {
 
     try {
       if (!thisResponse.filled) {
-        const validatorErrorBag = this.validator.validate(httpRequest.body)
+        const validatorErrorBag = this.validator.validate(httpRequest.params)
         if (validatorErrorBag) {
           thisResponse.data = badRequest(validatorErrorBag)
           thisResponse.filled = true
         }
       }
 
-      const { surveyId } = httpRequest.body
+      const { surveyId } = httpRequest.params
       const survey = await this.surveyLoader.loadById(surveyId)
 
       if (!thisResponse.filled) {

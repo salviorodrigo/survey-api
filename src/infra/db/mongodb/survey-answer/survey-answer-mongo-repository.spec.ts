@@ -60,8 +60,8 @@ const makeFakeSurveyAnswerData = async (): Promise<SaveSurveyAnswerModel> => {
   const fakeAccount = await createFakeAccount()
   const fakeSurvey = await createFakeSurvey()
   return {
-    account_id: fakeAccount.id,
-    survey_id: fakeSurvey.id,
+    accountId: fakeAccount.id,
+    surveyId: fakeSurvey.id,
     answer: fakeSurvey.answerOptions[0].answer
   }
 }
@@ -87,8 +87,8 @@ describe('SurveyAnswer Mongo Repository', () => {
 
     expect(surveyAnswer).toBeTruthy()
     expect(surveyAnswer.id).toBeTruthy()
-    expect(surveyAnswer.account_id).toEqual(fakeSurveyAnswerData.account_id)
-    expect(surveyAnswer.survey_id).toEqual(fakeSurveyAnswerData.survey_id)
+    expect(surveyAnswer.accountId).toEqual(fakeSurveyAnswerData.accountId)
+    expect(surveyAnswer.surveyId).toEqual(fakeSurveyAnswerData.surveyId)
     expect(surveyAnswer.answer).toEqual(fakeSurveyAnswerData.answer)
   })
 
@@ -101,8 +101,8 @@ describe('SurveyAnswer Mongo Repository', () => {
 
     expect(surveyAnswer).toBeTruthy()
     expect(surveyAnswer.id).toEqual(fakeSurveyAnswer.id)
-    expect(surveyAnswer.account_id).toEqual(fakeSurveyAnswerData.account_id)
-    expect(surveyAnswer.survey_id).toEqual(fakeSurveyAnswerData.survey_id)
+    expect(surveyAnswer.accountId).toEqual(fakeSurveyAnswerData.accountId)
+    expect(surveyAnswer.surveyId).toEqual(fakeSurveyAnswerData.surveyId)
     expect(surveyAnswer.answer).toEqual(fakeSurveyAnswerData.answer)
   })
 })

@@ -6,9 +6,9 @@ import {
   SurveyModel,
   Validator
 } from './load-survey-by-id-controller-protocols'
-import MockDate from 'mockdate'
 import { badRequest, ok, serverError } from '@/presentation/helpers/http/http-helper'
 import { InvalidParamError } from '@/presentation/errors'
+import MockDate from 'mockdate'
 
 beforeAll(() => {
   MockDate.set(new Date())

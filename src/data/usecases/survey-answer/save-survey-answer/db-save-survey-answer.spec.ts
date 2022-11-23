@@ -15,8 +15,8 @@ afterAll(() => {
 })
 
 const makeFakeAddSurveyAnswerData = (): SaveSurveyAnswerModel => ({
-  survey_id: 'valid_survey_id',
-  account_id: 'account',
+  surveyId: 'valid_surveyId',
+  accountId: 'account',
   answer: 'any_answer'
 })
 

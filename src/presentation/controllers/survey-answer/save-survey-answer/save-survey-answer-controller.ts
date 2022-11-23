@@ -2,14 +2,16 @@ import {
   Controller,
   HttpRequest,
   HttpResponse,
-  LoadSurveyById
+  LoadSurveyById,
+  Validator
 } from './save-survey-answer-controller-protocols'
 import { InvalidParamError } from '@/presentation/errors'
 import { badRequest, serverError } from '@/presentation/helpers/http/http-helper'
 
 export class SaveSurveyAnswerController implements Controller {
   constructor (
-    private readonly surveyLoader: LoadSurveyById
+    private readonly surveyLoader: LoadSurveyById,
+    private readonly validator: Validator
   ) {}
 
   async handle (httpRequest: HttpRequest): Promise<HttpResponse> {
@@ -18,9 +20,18 @@ export class SaveSurveyAnswerController implements Controller {
       data: null
     }
     try {
-      const { surveyId } = httpRequest.params
       if (!thisResponse.filled) {
-        const survey = await this.surveyLoader.loadById(surveyId)
+        const validatorErrorBag = this.validator.validate(httpRequest.params)
+        if (validatorErrorBag) {
+          thisResponse.data = badRequest(validatorErrorBag)
+          thisResponse.filled = true
+        }
+      }
+
+      const { surveyId } = httpRequest.params
+      const survey = await this.surveyLoader.loadById(surveyId)
+
+      if (!thisResponse.filled) {
         if (!survey) {
           thisResponse.data = badRequest(new InvalidParamError('surveyId'))
           thisResponse.filled = true

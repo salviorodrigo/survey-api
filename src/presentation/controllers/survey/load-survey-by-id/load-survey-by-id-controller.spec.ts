@@ -6,6 +6,7 @@ import {
   SurveyModel
 } from './load-survey-by-id-controller-protocols'
 import MockDate from 'mockdate'
+import { ok } from '@/presentation/helpers/http/http-helper'
 
 beforeAll(() => {
   MockDate.set(new Date())
@@ -70,12 +71,10 @@ describe('LoadSurveyById Controller', () => {
     expect(loadSpy).toHaveBeenCalledWith(fakeRequestData.body.surveyId)
   })
 
-  test('Should call LoadSurveyById with correct values', async () => {
-    const { sut, surveyLoaderStub } = makeSut()
-    const loadSpy = jest.spyOn(surveyLoaderStub, 'loadById')
-    const fakeRequestData = makeFakeRequest()
-    await sut.handle(fakeRequestData)
+  test('Should returns a survey on success', async () => {
+    const { sut } = makeSut()
+    const thisResponse = await sut.handle(makeFakeRequest())
 
-    expect(loadSpy).toHaveBeenCalledWith(fakeRequestData.body.surveyId)
+    expect(thisResponse).toEqual(ok(makeFakeSurvey()))
   })
 })

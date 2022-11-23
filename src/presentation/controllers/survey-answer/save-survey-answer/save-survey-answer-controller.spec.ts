@@ -7,7 +7,7 @@ import {
   Validator,
   SaveSurveyAnswer
 } from './save-survey-answer-controller-protocols'
-import { badRequest, serverError } from '@/presentation/helpers/http/http-helper'
+import { badRequest, ok, serverError } from '@/presentation/helpers/http/http-helper'
 import { InvalidParamError } from '@/presentation/errors'
 import MockDate from 'mockdate'
 import { SurveyAnswerModel } from '@/domain/models'
@@ -163,5 +163,12 @@ describe('SaveSurveyAnswer Controller', () => {
     const fakeRequest = makeFakeRequest()
     const thisResponse = await sut.handle(fakeRequest)
     expect(thisResponse).toEqual(serverError(new Error()))
+  })
+
+  test('Should returns 200 on success', async () => {
+    const { sut } = makeSut()
+    const fakeRequest = makeFakeRequest()
+    const thisResponse = await sut.handle(fakeRequest)
+    expect(thisResponse).toEqual(ok(makeFakeSurveyAnswer()))
   })
 })

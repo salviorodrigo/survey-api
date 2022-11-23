@@ -5,8 +5,9 @@ import {
   SurveyAnswerOptionModel,
   SurveyModel
 } from './save-survey-answer-controller-protocols'
-import { serverError } from '@/presentation/helpers/http/http-helper'
+import { badRequest, serverError } from '@/presentation/helpers/http/http-helper'
 import MockDate from 'mockdate'
+import { InvalidParamError } from '@/presentation/errors'
 
 beforeAll(() => {
   MockDate.set(new Date())
@@ -69,6 +70,14 @@ describe('SaveSurveyAnswer Controller', () => {
     const fakeRequest = makeFakeRequest()
     await sut.handle(fakeRequest)
     expect(loadSpy).toHaveBeenCalledWith(fakeRequest.params.surveyId)
+  })
+
+  test('Should returns 400 if LoadSurveyById returns null', async () => {
+    const { sut, surveyLoaderByIdStub } = makeSut()
+    jest.spyOn(surveyLoaderByIdStub, 'loadById').mockResolvedValueOnce(null)
+    const fakeRequest = makeFakeRequest()
+    const thisResponse = await sut.handle(fakeRequest)
+    expect(thisResponse).toEqual(badRequest(new InvalidParamError('surveyId')))
   })
 
   test('Should returns 500 if LoadSurveyById throws', async () => {

@@ -3,7 +3,8 @@ import {
   LoadSurveyById,
   HttpRequest,
   SurveyAnswerOptionModel,
-  SurveyModel
+  SurveyModel,
+  Validator
 } from './save-survey-answer-controller-protocols'
 import { badRequest, serverError } from '@/presentation/helpers/http/http-helper'
 import MockDate from 'mockdate'
@@ -40,6 +41,15 @@ const makeFakeSurvey = (): SurveyModel => ({
   date: new Date()
 })
 
+const makeValidatorStub = (): Validator => {
+  class ValidatorStub implements Validator {
+    validate (input: any): Error | null {
+      return null
+    }
+  }
+  return new ValidatorStub()
+}
+
 const makeLoadSurveyByIdStub = (): LoadSurveyById => {
   class LoadSurveyByIdStub implements LoadSurveyById {
     async loadById (id: string): Promise<SurveyModel | null> {
@@ -51,20 +61,31 @@ const makeLoadSurveyByIdStub = (): LoadSurveyById => {
 
 type SutTypes = {
   sut: SaveSurveyAnswerController
+  validatorStub: Validator
   surveyLoaderByIdStub: LoadSurveyById
 }
 
 const makeSut = (): SutTypes => {
+  const validatorStub = makeValidatorStub()
   const surveyLoaderByIdStub = makeLoadSurveyByIdStub()
-  const sut = new SaveSurveyAnswerController(surveyLoaderByIdStub)
+  const sut = new SaveSurveyAnswerController(surveyLoaderByIdStub, validatorStub)
   return {
     sut,
+    validatorStub,
     surveyLoaderByIdStub
   }
 }
 
 describe('SaveSurveyAnswer Controller', () => {
-  test('Should call validator with correct values', async () => {
+  test('Should call Validator with correct values', async () => {
+    const { sut, validatorStub } = makeSut()
+    const validateSyp = jest.spyOn(validatorStub, 'validate')
+    const httpRequest = makeFakeRequest()
+    await sut.handle(httpRequest)
+    expect(validateSyp).toHaveBeenCalledWith(httpRequest.params)
+  })
+
+  test('Should call LoadSurveyById with correct values', async () => {
     const { sut, surveyLoaderByIdStub } = makeSut()
     const loadSpy = jest.spyOn(surveyLoaderByIdStub, 'loadById')
     const fakeRequest = makeFakeRequest()

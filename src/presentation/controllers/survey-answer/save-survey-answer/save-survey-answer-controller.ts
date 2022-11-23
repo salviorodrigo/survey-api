@@ -28,12 +28,19 @@ export class SaveSurveyAnswerController implements Controller {
         }
       }
 
-      const { surveyId } = httpRequest.params
+      const { surveyId, answer } = httpRequest.params
       const survey = await this.surveyLoader.loadById(surveyId)
 
       if (!thisResponse.filled) {
         if (!survey) {
           thisResponse.data = badRequest(new InvalidParamError('surveyId'))
+          thisResponse.filled = true
+        }
+      }
+      if (!thisResponse.filled) {
+        const surveyAnswerOption = survey.answerOptions.find(item => item.answer === answer)
+        if (!surveyAnswerOption) {
+          thisResponse.data = badRequest(new InvalidParamError('answer'))
           thisResponse.filled = true
         }
       }

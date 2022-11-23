@@ -11,7 +11,7 @@ import { badRequest, serverError, ok, forbidden } from '@/presentation/helpers/h
 
 export class SignUpController implements Controller {
   constructor (
-    private readonly addAccount: AddAccount,
+    private readonly accountAdder: AddAccount,
     private readonly validator: Validator,
     private readonly authenticator: Authenticator
   ) {}
@@ -37,7 +37,7 @@ export class SignUpController implements Controller {
       }
 
       if (!thisResponse.filled) {
-        const account = await this.addAccount.add({
+        const account = await this.accountAdder.add({
           name,
           email,
           password

@@ -49,7 +49,7 @@ const makeLoadPollsStub = (): LoadPolls => {
 
 type SutTypes = {
   sut: LoadPollsController
-  loadPollsStub: LoadPolls
+  pollsLoaderStub: LoadPolls
 }
 
 const makeSut = (): SutTypes => {
@@ -57,13 +57,13 @@ const makeSut = (): SutTypes => {
   const sut = new LoadPollsController(loadPollsStub)
   return {
     sut,
-    loadPollsStub
+    pollsLoaderStub: loadPollsStub
   }
 }
 
 describe('LoadPolls Controller', () => {
   test('Should call LoadPolls', async () => {
-    const { sut, loadPollsStub } = makeSut()
+    const { sut, pollsLoaderStub: loadPollsStub } = makeSut()
     const loadSpy = jest.spyOn(loadPollsStub, 'load')
     await sut.handle({})
     expect(loadSpy).toHaveBeenCalled()
@@ -76,14 +76,14 @@ describe('LoadPolls Controller', () => {
   })
 
   test('Should returns 204 if LoadPolls returns empty', async () => {
-    const { sut, loadPollsStub } = makeSut()
+    const { sut, pollsLoaderStub: loadPollsStub } = makeSut()
     jest.spyOn(loadPollsStub, 'load').mockResolvedValueOnce([])
     const httpResponse = await sut.handle({})
     expect(httpResponse).toEqual(noContent())
   })
 
   test('Should return 500 if LoadPolls throws', async () => {
-    const { sut, loadPollsStub } = makeSut()
+    const { sut, pollsLoaderStub: loadPollsStub } = makeSut()
     jest.spyOn(loadPollsStub, 'load').mockImplementationOnce(() => {
       throw new Error()
     })

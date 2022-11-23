@@ -7,30 +7,30 @@ import {
 import { noContent, ok, serverError } from '@/presentation/helpers/http/http-helper'
 
 export class LoadPollsController implements Controller {
-  constructor (private readonly loadPolls: LoadPolls) {}
+  constructor (private readonly pollsLoader: LoadPolls) {}
 
   async handle (httpRequest: HttpRequest): Promise<HttpResponse> {
-    const thisReponse = {
+    const thisResponse = {
       filled: false,
       data: null
     }
 
     try {
-      if (!thisReponse.filled) {
-        const polls = await this.loadPolls.load()
+      if (!thisResponse.filled) {
+        const polls = await this.pollsLoader.load()
         if (polls.length) {
-          thisReponse.data = ok(polls)
-          thisReponse.filled = true
+          thisResponse.data = ok(polls)
+          thisResponse.filled = true
         } else {
-          thisReponse.data = noContent()
-          thisReponse.filled = true
+          thisResponse.data = noContent()
+          thisResponse.filled = true
         }
       }
     } catch (error) {
-      thisReponse.data = serverError(error)
-      thisReponse.filled = true
+      thisResponse.data = serverError(error)
+      thisResponse.filled = true
     }
 
-    return thisReponse.data
+    return thisResponse.data
   }
 }

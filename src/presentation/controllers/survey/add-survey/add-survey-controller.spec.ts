@@ -58,12 +58,12 @@ type SutTypes = {
 
 const makeSut = (): SutTypes => {
   const validatorStub = makeValidatorStub()
-  const addSurveyStub = makeAddSurveyStub()
-  const sut = new AddSurveyController(validatorStub, addSurveyStub)
+  const surveyAdderStub = makeAddSurveyStub()
+  const sut = new AddSurveyController(validatorStub, surveyAdderStub)
   return {
     sut,
     validatorStub,
-    addSurveyStub
+    addSurveyStub: surveyAdderStub
   }
 }
 

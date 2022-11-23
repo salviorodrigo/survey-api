@@ -9,7 +9,7 @@ import { forbidden, ok, serverError } from '@/presentation/helpers/http/http-hel
 
 export class AuthMiddleware implements Middleware {
   constructor (
-    private readonly loadAccountByToken: LoadAccountByToken,
+    private readonly accountLoaderByToken: LoadAccountByToken,
     private readonly role?: string
   ) {}
 
@@ -27,7 +27,7 @@ export class AuthMiddleware implements Middleware {
 
       if (!thisResponse.filled) {
         const accessToken = httpRequest.headers?.['x-access-token']
-        const account = await this.loadAccountByToken.load(accessToken, this.role)
+        const account = await this.accountLoaderByToken.load(accessToken, this.role)
         if (account) {
           thisResponse.data = ok({ accountId: account.id })
           thisResponse.filled = true

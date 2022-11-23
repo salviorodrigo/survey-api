@@ -10,7 +10,7 @@ import { badRequest, serverError, noContent } from '@/presentation/helpers/http/
 export class AddSurveyController implements Controller {
   constructor (
     private readonly validator: Validator,
-    private readonly addSurvey: AddSurvey
+    private readonly surveyAdder: AddSurvey
   ) {}
 
   async handle (httpRequest: HttpRequest): Promise<HttpResponse> {
@@ -31,7 +31,7 @@ export class AddSurveyController implements Controller {
       const { question, answerOptions } = httpRequest.body
 
       if (!thisResponse.filled) {
-        await this.addSurvey.add({
+        await this.surveyAdder.add({
           question,
           answerOptions,
           date: new Date()

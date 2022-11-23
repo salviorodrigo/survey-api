@@ -71,13 +71,13 @@ type SutTypes = {
 }
 
 const makeSut = (): SutTypes => {
-  const addAccountStub = makeAddAccount()
+  const accountAdderStub = makeAddAccount()
   const validatorStub = makeValidatorStub()
   const authenticatorStub = makeAuthenticatorStub()
-  const sut = new SignUpController(addAccountStub, validatorStub, authenticatorStub)
+  const sut = new SignUpController(accountAdderStub, validatorStub, authenticatorStub)
   return {
     sut,
-    addAccountStub,
+    addAccountStub: accountAdderStub,
     validatorStub,
     authenticatorStub
   }

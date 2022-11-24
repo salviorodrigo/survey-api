@@ -23,7 +23,9 @@ afterAll(() => {
 
 const makeFakeRequest = (): HttpRequest => ({
   params: {
-    surveyId: 'valid_surveyId',
+    surveyId: 'valid_surveyId'
+  },
+  body: {
     accountId: 'valid_accountId',
     answer: 'valid_answer'
   }
@@ -89,9 +91,9 @@ type SutTypes = {
 }
 
 const makeSut = (): SutTypes => {
+  const surveyLoaderByIdStub = makeLoadSurveyByIdStub()
   const validatorStub = makeValidatorStub()
   const surveyAnswerSaverStub = makeSurveyAnswerSaverStub()
-  const surveyLoaderByIdStub = makeLoadSurveyByIdStub()
   const sut = new SaveSurveyAnswerController(surveyLoaderByIdStub, validatorStub, surveyAnswerSaverStub)
   return {
     sut,
@@ -106,8 +108,9 @@ describe('SaveSurveyAnswer Controller', () => {
     const { sut, validatorStub } = makeSut()
     const validateSyp = jest.spyOn(validatorStub, 'validate')
     const httpRequest = makeFakeRequest()
+    const params = Object.assign({}, httpRequest.params, httpRequest.body)
     await sut.handle(httpRequest)
-    expect(validateSyp).toHaveBeenCalledWith(httpRequest.params)
+    expect(validateSyp).toHaveBeenCalledWith(params)
   })
 
   test('Should return 400 if Validator fails', async () => {
@@ -145,7 +148,7 @@ describe('SaveSurveyAnswer Controller', () => {
   test('Should returns 400 if an invalid answer is provided', async () => {
     const { sut } = makeSut()
     const fakeRequest = makeFakeRequest()
-    fakeRequest.params = Object.assign({}, fakeRequest.params, { answer: 'invalid_answer' })
+    fakeRequest.body = Object.assign({}, fakeRequest.body, { answer: 'invalid_answer' })
     const thisResponse = await sut.handle(fakeRequest)
     expect(thisResponse).toEqual(badRequest(new InvalidParamError('answer')))
   })

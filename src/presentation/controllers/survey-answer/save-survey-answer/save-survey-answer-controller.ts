@@ -23,14 +23,16 @@ export class SaveSurveyAnswerController implements Controller {
     }
     try {
       if (!thisResponse.filled) {
-        const validatorErrorBag = this.validator.validate(httpRequest.params)
+        const params = Object.assign({}, httpRequest.params, httpRequest.body)
+        const validatorErrorBag = this.validator.validate(params)
         if (validatorErrorBag) {
           thisResponse.data = badRequest(validatorErrorBag)
           thisResponse.filled = true
         }
       }
 
-      const { surveyId, accountId, answer } = httpRequest.params
+      const { surveyId } = httpRequest.params
+      const { accountId, answer } = httpRequest.body
       const survey = await this.surveyLoader.loadById(surveyId)
 
       if (!thisResponse.filled) {

@@ -22,8 +22,9 @@ export class SaveSurveyAnswerController implements Controller {
       data: null
     }
     try {
+      const params = Object.assign({}, httpRequest.params, httpRequest.body, { accountId: httpRequest.accountId })
+
       if (!thisResponse.filled) {
-        const params = Object.assign({}, httpRequest.params, httpRequest.body)
         const validatorErrorBag = this.validator.validate(params)
         if (validatorErrorBag) {
           thisResponse.data = badRequest(validatorErrorBag)
@@ -31,8 +32,7 @@ export class SaveSurveyAnswerController implements Controller {
         }
       }
 
-      const { surveyId } = httpRequest.params
-      const { accountId, answer } = httpRequest.body
+      const { surveyId, accountId, answer } = params
       const survey = await this.surveyLoader.loadById(surveyId)
 
       if (!thisResponse.filled) {

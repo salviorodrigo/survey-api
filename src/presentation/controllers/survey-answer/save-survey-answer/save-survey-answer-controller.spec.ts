@@ -22,11 +22,11 @@ afterAll(() => {
 })
 
 const makeFakeRequest = (): HttpRequest => ({
+  accountId: 'valid_accountId',
   params: {
     surveyId: 'valid_surveyId'
   },
   body: {
-    accountId: 'valid_accountId',
     answer: 'valid_answer'
   }
 })
@@ -108,7 +108,7 @@ describe('SaveSurveyAnswer Controller', () => {
     const { sut, validatorStub } = makeSut()
     const validateSyp = jest.spyOn(validatorStub, 'validate')
     const httpRequest = makeFakeRequest()
-    const params = Object.assign({}, httpRequest.params, httpRequest.body)
+    const params = Object.assign({}, httpRequest.params, httpRequest.body, { accountId: httpRequest.accountId })
     await sut.handle(httpRequest)
     expect(validateSyp).toHaveBeenCalledWith(params)
   })

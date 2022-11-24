@@ -4,6 +4,7 @@ export type HttpResponse = {
 }
 
 export type HttpRequest = {
+  accountId?: string
   body?: any
   headers?: any
   params?: any

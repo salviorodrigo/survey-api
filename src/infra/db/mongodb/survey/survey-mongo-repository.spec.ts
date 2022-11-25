@@ -95,7 +95,7 @@ describe('Survey Mongo Repository', () => {
 
     test('Should return null if survey.id doesn\'t exists', async () => {
       const sut = makeSut()
-      const survey = await sut.loadById('invalid_id')
+      const survey = await sut.loadById('an_invalidId')
 
       expect(survey).toBeNull()
     })

@@ -4,5 +4,5 @@ import { makeSaveSurveyAnswerController } from '@/main/factories/controllers/sur
 import { Router } from 'express'
 
 export default (router: Router): void => {
-  router.put('/surveys/:surveyId/answers', auth, (adaptRoute(makeSaveSurveyAnswerController())))
+  router.put('/polls/:surveyId/answers', auth, (adaptRoute(makeSaveSurveyAnswerController())))
 }

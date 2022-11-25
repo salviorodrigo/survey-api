@@ -2,10 +2,11 @@
 
 POST http://localhost:5050/api/polls HTTP/1.1
 content-type: application/json
+x-access-token: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjYzNzQ1MGUwZDFlZTUzMjViOTJkYzE2NCIsImlhdCI6MTY2ODU2NzI2N30.Ag5Sb4O1QB35U9wfFYXJD-M7xDcd1-sqqmEn64JXwJs
 
 {
     "question": "Question 1",
-    "answers": [{
+    "answerOptions": [{
       "image": "http://localhost:5050/image.jpg",
       "answer": "Answer 1"
     },{

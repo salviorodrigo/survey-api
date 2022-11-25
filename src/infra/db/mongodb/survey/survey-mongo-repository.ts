@@ -6,6 +6,7 @@ import {
   LoadSurveyById
 } from './survey-mongo-repository-protocols'
 import { MongoHelper } from '@/infra/db/mongodb/helpers/mongo-helper'
+import { ObjectId } from 'mongodb'
 
 export class SurveyMongoRepository implements AddSurveyRepository, LoadPollsRepository, LoadSurveyById {
   async add (surveyData: AddSurveyModel): Promise<void> {
@@ -28,7 +29,7 @@ export class SurveyMongoRepository implements AddSurveyRepository, LoadPollsRepo
 
     if (!thisResponse.filled) {
       const surveyCollection = await MongoHelper.getCollection('polls')
-      const survey = await surveyCollection.findOne({ _id: id })
+      const survey = await surveyCollection.findOne({ _id: new ObjectId(id) })
       if (survey) {
         thisResponse.data = MongoHelper.map(survey)
         thisResponse.filled = true

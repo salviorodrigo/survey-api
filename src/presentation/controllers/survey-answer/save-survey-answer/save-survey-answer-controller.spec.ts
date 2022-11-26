@@ -11,7 +11,7 @@ import { badRequest, ok, serverError } from '@/presentation/helpers/http/http-he
 import { InvalidParamError } from '@/presentation/errors'
 import MockDate from 'mockdate'
 import { SurveyAnswerModel } from '@/domain/models'
-import { SaveSurveyAnswerModel } from '@/domain/usecases/survey-answer'
+import { SaveSurveyAnswerParams } from '@/domain/usecases/survey-answer'
 
 beforeAll(() => {
   MockDate.set(new Date())
@@ -46,7 +46,7 @@ const makeFakeSurvey = (): SurveyModel => ({
   date: new Date()
 })
 
-const makeFakeSaveSurveyAnswer = (): SaveSurveyAnswerModel => ({
+const makeFakeSaveSurveyAnswer = (): SaveSurveyAnswerParams => ({
   surveyId: 'valid_surveyId',
   accountId: 'valid_accountId',
   answer: 'valid_answer'
@@ -76,7 +76,7 @@ const makeLoadSurveyByIdStub = (): LoadSurveyById => {
 
 const makeSurveyAnswerSaverStub = (): SaveSurveyAnswer => {
   class SaveSurveyAnswerStub implements SaveSurveyAnswer {
-    async save (data: SaveSurveyAnswerModel): Promise<SurveyAnswerModel | null> {
+    async save (data: SaveSurveyAnswerParams): Promise<SurveyAnswerModel | null> {
       return await Promise.resolve(makeFakeSurveyAnswer())
     }
   }

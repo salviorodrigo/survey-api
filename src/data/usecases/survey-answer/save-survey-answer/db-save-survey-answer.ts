@@ -2,13 +2,13 @@ import {
   SaveSurveyAnswerRepository,
   SurveyAnswerModel,
   SaveSurveyAnswer,
-  SaveSurveyAnswerModel
+  SaveSurveyAnswerParams
 } from './db-save-survey-answer-protocols'
 
 export class DbSaveSurveyAnswer implements SaveSurveyAnswer {
   constructor (private readonly saveSurveyAnswerRepository: SaveSurveyAnswerRepository) {}
 
-  async save (surveyAnswerData: SaveSurveyAnswerModel): Promise<SurveyAnswerModel | null> {
+  async save (surveyAnswerData: SaveSurveyAnswerParams): Promise<SurveyAnswerModel | null> {
     const thisResponse = {
       filled: false,
       data: null

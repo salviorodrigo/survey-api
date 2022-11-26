@@ -1,6 +1,6 @@
 import { SurveyMongoRepository } from './survey-mongo-repository'
 import {
-  AddSurveyModel,
+  AddSurveyParams,
   SurveyAnswerOptionModel
 } from './survey-mongo-repository-protocols'
 import { MongoHelper } from '@/infra/db/mongodb/helpers/mongo-helper'
@@ -33,7 +33,7 @@ const makeFakeSurveyAnswerOptions = (): SurveyAnswerOptionModel[] => {
   }]
 }
 
-const makeFakeSurveyData = (): AddSurveyModel => ({
+const makeFakeSurveyData = (): AddSurveyParams => ({
   question: 'any_question',
   answerOptions: makeFakeSurveyAnswerOptions(),
   date: new Date()

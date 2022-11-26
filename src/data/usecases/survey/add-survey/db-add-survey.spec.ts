@@ -1,6 +1,6 @@
 import { DbAddSurvey } from './db-add-survey'
 import {
-  AddSurveyModel,
+  AddSurveyParams,
   AddSurveyRepository,
   SurveyAnswerOptionModel
 } from './db-add-survey-protocols'
@@ -23,7 +23,7 @@ const makeFakeSurveyAnswerOptions = (): SurveyAnswerOptionModel[] => {
   }]
 }
 
-const makeFakeSurveyData = (): AddSurveyModel => ({
+const makeFakeSurveyData = (): AddSurveyParams => ({
   question: 'any_question',
   answerOptions: makeFakeSurveyAnswerOptions(),
   date: new Date()
@@ -31,7 +31,7 @@ const makeFakeSurveyData = (): AddSurveyModel => ({
 
 const makeAddSurveyRepositoryStub = (): AddSurveyRepository => {
   class AddSurveyRepositoryStub implements AddSurveyRepository {
-    async add (surveyData: AddSurveyModel): Promise<void> {}
+    async add (surveyData: AddSurveyParams): Promise<void> {}
   }
   return new AddSurveyRepositoryStub()
 }

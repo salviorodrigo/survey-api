@@ -1,6 +1,6 @@
 import { SurveyAnswerMongoRepository } from './survey-answer-mongo-repository'
 import {
-  SaveSurveyAnswerModel,
+  SaveSurveyAnswerParams,
   AccountModel,
   SurveyModel
 } from './survey-answer-mongo-repository-protocols'
@@ -56,7 +56,7 @@ const createFakeSurvey = async (): Promise<SurveyModel> => {
   return MongoHelper.map(survey)
 }
 
-const makeFakeSurveyAnswerData = async (): Promise<SaveSurveyAnswerModel> => {
+const makeFakeSurveyAnswerData = async (): Promise<SaveSurveyAnswerParams> => {
   const fakeAccount = await createFakeAccount()
   const fakeSurvey = await createFakeSurvey()
   return {
@@ -66,7 +66,7 @@ const makeFakeSurveyAnswerData = async (): Promise<SaveSurveyAnswerModel> => {
   }
 }
 
-const createFakeSurveyAnswer = async (surveyAnswerData: SaveSurveyAnswerModel): Promise<SurveyAnswerModel> => {
+const createFakeSurveyAnswer = async (surveyAnswerData: SaveSurveyAnswerParams): Promise<SurveyAnswerModel> => {
   return MongoHelper.map(await (
     await surveyAnswerCollection.insertOne(
       Object.assign({}, surveyAnswerData, { date: new Date() })

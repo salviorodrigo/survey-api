@@ -3,7 +3,7 @@ import request from 'supertest'
 import { MongoHelper } from '@/infra/db/mongodb/helpers/mongo-helper'
 import { Collection } from 'mongodb'
 import { SurveyAnswerOptionModel } from '@/domain/models'
-import { AddSurveyModel } from '@/domain/usecases/survey'
+import { AddSurveyParams } from '@/domain/usecases/survey'
 import { sign } from 'jsonwebtoken'
 import env from '@/main/config/env'
 
@@ -53,7 +53,7 @@ const makeFakeSurveyAnswerOptions = (): SurveyAnswerOptionModel[] => {
   }]
 }
 
-const makeFakeSurveyData = (): AddSurveyModel => ({
+const makeFakeSurveyData = (): AddSurveyParams => ({
   question: 'any_question',
   answerOptions: makeFakeSurveyAnswerOptions(),
   date: new Date()

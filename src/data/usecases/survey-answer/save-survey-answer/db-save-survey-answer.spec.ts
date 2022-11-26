@@ -2,7 +2,7 @@ import { DbSaveSurveyAnswer } from './db-save-survey-answer'
 import {
   SaveSurveyAnswerRepository,
   SurveyAnswerModel,
-  SaveSurveyAnswerModel
+  SaveSurveyAnswerParams
 } from './db-save-survey-answer-protocols'
 import MockDate from 'mockdate'
 
@@ -14,7 +14,7 @@ afterAll(() => {
   MockDate.reset()
 })
 
-const makeFakeAddSurveyAnswerData = (): SaveSurveyAnswerModel => ({
+const makeFakeAddSurveyAnswerData = (): SaveSurveyAnswerParams => ({
   surveyId: 'valid_surveyId',
   accountId: 'account',
   answer: 'any_answer'
@@ -26,7 +26,7 @@ const makeFakeSurveyAnswerData = (): SurveyAnswerModel => (
 
 const makeSaveSurveyAnswerRepositoryStub = (): SaveSurveyAnswerRepository => {
   class SaveSurveyAnswerRepositoryStub implements SaveSurveyAnswerRepository {
-    async save (surveyAnswerData: SaveSurveyAnswerModel): Promise<SurveyAnswerModel> {
+    async save (surveyAnswerData: SaveSurveyAnswerParams): Promise<SurveyAnswerModel> {
       return await Promise.resolve(makeFakeSurveyAnswerData())
     }
   }

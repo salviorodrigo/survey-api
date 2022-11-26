@@ -1,6 +1,6 @@
 import {
   Authenticator,
-  AuthenticatorModel,
+  AuthenticatorParams,
   HashComparer,
   Encrypter,
   LoadAccountByEmailRepository,
@@ -15,7 +15,7 @@ export class DbAuthenticator implements Authenticator {
     private readonly updateAccessTokenRepository: UpdateAccessTokenRepository
   ) {}
 
-  async auth (credentials: AuthenticatorModel): Promise<string> {
+  async auth (credentials: AuthenticatorParams): Promise<string> {
     const thisResponse = {
       fillable: false,
       accessToken: null

@@ -3,7 +3,7 @@ import {
   HttpRequest,
   Authenticator,
   Validator,
-  AuthenticatorModel
+  AuthenticatorParams
 } from './login-controller-protocols'
 import { badRequest, serverError, unauthorized, ok } from '@/presentation/helpers/http/http-helper'
 import { MissingParamError } from '@/presentation/errors'
@@ -26,7 +26,7 @@ const makeValidatorStub = (): Validator => {
 
 const makeAuthenticatorStub = (): Authenticator => {
   class AuthenticatorStub implements Authenticator {
-    async auth (credentials: AuthenticatorModel): Promise<string> {
+    async auth (credentials: AuthenticatorParams): Promise<string> {
       return 'any_token'
     }
   }

@@ -16,6 +16,7 @@ export class DbLoadAccountByToken implements LoadAccountByToken {
       filled: false,
       data: null
     }
+
     let account: AccountModel | null
 
     if (!thisResponse.filled) {

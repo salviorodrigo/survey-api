@@ -11,6 +11,7 @@ import { ObjectId } from 'mongodb'
 export class SurveyMongoRepository implements AddSurveyRepository, LoadPollsRepository, LoadSurveyById {
   async add (surveyData: AddSurveyParams): Promise<void> {
     const surveyCollection = await MongoHelper.getCollection('polls')
+    surveyData = Object.assign({}, surveyData, { date: new Date() })
     await surveyCollection.insertOne(surveyData)
   }
 

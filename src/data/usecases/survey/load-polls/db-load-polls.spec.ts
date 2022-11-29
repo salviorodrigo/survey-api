@@ -1,9 +1,7 @@
 import { DbLoadPolls } from './db-load-polls'
-import {
-  SurveyModel,
-  LoadPollsRepository,
-  SurveyAnswerOptionModel
-} from './db-load-polls-protocols'
+import { LoadPollsRepository } from './db-load-polls-protocols'
+import { mockSurveyModel } from '@/domain/models'
+import { mockLoadPollsRepository } from '@/data/protocols/db/survey'
 import MockDate from 'mockdate'
 
 beforeAll(() => {
@@ -14,45 +12,13 @@ afterAll(() => {
   MockDate.reset()
 })
 
-const makeFakeSurveyAnswerOptions = (): SurveyAnswerOptionModel[] => {
-  return [{
-    answer: 'any_answer',
-    imagePath: 'https://image.path/locale.jpg'
-  }, {
-    answer: 'another_answer'
-  }]
-}
-
-const makeFakePolls = (): SurveyModel[] => {
-  return [{
-    id: 'any_id',
-    question: 'any_question',
-    answerOptions: makeFakeSurveyAnswerOptions(),
-    date: new Date()
-  }, {
-    id: 'another_id',
-    question: 'another_question',
-    answerOptions: makeFakeSurveyAnswerOptions(),
-    date: new Date()
-  }]
-}
-
-const makeLoadPollsRepositoryStub = (): LoadPollsRepository => {
-  class LoadPollsRepositoryStub implements LoadPollsRepository {
-    async loadAll (): Promise<SurveyModel[]> {
-      return await Promise.resolve(makeFakePolls())
-    }
-  }
-  return new LoadPollsRepositoryStub()
-}
-
 type SutTypes = {
   sut: DbLoadPolls
   loadPollsRepositoryStub: LoadPollsRepository
 }
 
 const makeSut = (): SutTypes => {
-  const loadPollsRepositoryStub = makeLoadPollsRepositoryStub()
+  const loadPollsRepositoryStub = mockLoadPollsRepository()
   const sut = new DbLoadPolls(loadPollsRepositoryStub)
   return {
     sut,
@@ -71,14 +37,12 @@ describe('DbLoadPolls Usecase', () => {
   test('Should return a list of polls on success', async () => {
     const { sut } = makeSut()
     const thisResponse = await sut.load()
-    expect(thisResponse).toEqual(makeFakePolls())
+    expect(thisResponse).toEqual([mockSurveyModel(), mockSurveyModel()])
   })
 
   test('Should throw if LoadPollsRepository throws', async () => {
     const { sut, loadPollsRepositoryStub } = makeSut()
-    jest.spyOn(loadPollsRepositoryStub, 'loadAll').mockImplementationOnce(() => {
-      throw new Error()
-    })
+    jest.spyOn(loadPollsRepositoryStub, 'loadAll').mockRejectedValueOnce(new Error())
     const thisResponse = sut.load()
     await expect(thisResponse).rejects.toThrow()
   })

@@ -1,5 +1,5 @@
 import { AccountMongoRepository } from './account-mongo-repository'
-import { AddAccountParams } from './account-mongo-repository-protocols'
+import { mockAddAccountParams } from '@/domain/usecases/account'
 import { MongoHelper } from '@/infra/db/mongodb/helpers/mongo-helper'
 import { Collection } from 'mongodb'
 
@@ -17,12 +17,6 @@ beforeEach(async () => {
   await accountCollection.deleteMany({})
 })
 
-const makeFakeAddAccount = (): AddAccountParams => ({
-  name: 'any_name',
-  email: 'any_email@mail.com',
-  password: 'any_password'
-})
-
 const makeSut = (): AccountMongoRepository => {
   return new AccountMongoRepository()
 }
@@ -31,7 +25,7 @@ describe('Account Mongo Repository', () => {
   describe('add()', () => {
     test('Should return an account on add success', async () => {
       const sut = makeSut()
-      const account = await sut.add(makeFakeAddAccount())
+      const account = await sut.add(mockAddAccountParams())
       expect(account).toBeTruthy()
       expect(account.id).toBeTruthy()
       expect(account.name).toBe('any_name')
@@ -43,7 +37,7 @@ describe('Account Mongo Repository', () => {
   describe('loadByEmail()', () => {
     test('Should return an account on loadByEmail success', async () => {
       const sut = makeSut()
-      await sut.add(makeFakeAddAccount())
+      await sut.add(mockAddAccountParams())
       const account = await sut.loadByEmail('any_email@mail.com')
       expect(account).toBeTruthy()
       expect(account.id).toBeTruthy()
@@ -62,7 +56,7 @@ describe('Account Mongo Repository', () => {
   describe('updateAccessToken()', () => {
     test('Should update the account accessToken on updateAccessToken success', async () => {
       const sut = makeSut()
-      const account = await sut.add(makeFakeAddAccount())
+      const account = await sut.add(mockAddAccountParams())
       expect(account.accessToken).toBeFalsy()
       await sut.updateAccessToken(account.id, 'valid_accessToken')
       const accountWithAccessToken = await sut.loadByEmail(account.email)
@@ -73,7 +67,7 @@ describe('Account Mongo Repository', () => {
   describe('loadByToken()', () => {
     test('Should return an account on loadByToken without role', async () => {
       const sut = makeSut()
-      let account: any = await sut.add(makeFakeAddAccount())
+      let account: any = await sut.add(mockAddAccountParams())
       await sut.updateAccessToken(account.id, 'any_token')
       account = await sut.loadByToken('any_token')
       expect(account).toBeTruthy()

@@ -33,8 +33,7 @@ export class AddSurveyController implements Controller {
       if (!thisResponse.filled) {
         await this.surveyAdder.add({
           question,
-          answerOptions,
-          date: new Date()
+          answerOptions
         })
         thisResponse.data = noContent()
         thisResponse.filled = true

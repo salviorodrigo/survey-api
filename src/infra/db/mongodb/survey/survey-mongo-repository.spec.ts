@@ -1,11 +1,9 @@
 import { SurveyMongoRepository } from './survey-mongo-repository'
-import {
-  AddSurveyParams,
-  SurveyAnswerOptionModel
-} from './survey-mongo-repository-protocols'
+import { mockAddSurveyParams } from '@/domain/usecases/survey'
 import { MongoHelper } from '@/infra/db/mongodb/helpers/mongo-helper'
 import { Collection } from 'mongodb'
 import MockDate from 'mockdate'
+import { mockSurveyModel } from '../survey-answer/survey-answer-mongo-repository-protocols'
 
 let surveyCollection: Collection
 
@@ -24,21 +22,6 @@ beforeEach(async () => {
   await surveyCollection.deleteMany({})
 })
 
-const makeFakeSurveyAnswerOptions = (): SurveyAnswerOptionModel[] => {
-  return [{
-    answer: 'any_answer',
-    imagePath: 'https://image.path/locale.jpg'
-  }, {
-    answer: 'another_answer'
-  }]
-}
-
-const makeFakeSurveyData = (): AddSurveyParams => ({
-  question: 'any_question',
-  answerOptions: makeFakeSurveyAnswerOptions(),
-  date: new Date()
-})
-
 const makeSut = (): SurveyMongoRepository => {
   return new SurveyMongoRepository()
 }
@@ -47,7 +30,7 @@ describe('Survey Mongo Repository', () => {
   describe('add()', () => {
     test('Should add survey on success ', async () => {
       const sut = makeSut()
-      const fakeSurveyData = makeFakeSurveyData()
+      const fakeSurveyData = mockAddSurveyParams()
       await sut.add(fakeSurveyData)
       const survey = await surveyCollection.findOne({
         question: fakeSurveyData.question
@@ -60,8 +43,8 @@ describe('Survey Mongo Repository', () => {
   describe('loadAll()', () => {
     test('Should load all polls on success ', async () => {
       await surveyCollection.insertMany([
-        makeFakeSurveyData(),
-        makeFakeSurveyData()
+        mockSurveyModel(),
+        mockSurveyModel()
       ])
       const sut = makeSut()
       const polls = await sut.loadAll()
@@ -80,7 +63,7 @@ describe('Survey Mongo Repository', () => {
 
   describe('loadById()', () => {
     test('Should load a survey on success', async () => {
-      const fakeSurvey = makeFakeSurveyData()
+      const fakeSurvey = mockAddSurveyParams()
       const id = await (
         await surveyCollection.insertOne(fakeSurvey)
       ).ops[0]._id
@@ -90,7 +73,6 @@ describe('Survey Mongo Repository', () => {
       expect(survey.id).toBeTruthy()
       expect(survey.question).toEqual(fakeSurvey.question)
       expect(survey.answerOptions).toEqual(fakeSurvey.answerOptions)
-      expect(survey.date).toEqual(fakeSurvey.date)
     })
 
     test('Should return null if survey.id doesn\'t exists', async () => {

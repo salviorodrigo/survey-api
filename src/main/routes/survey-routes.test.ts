@@ -1,5 +1,4 @@
-import { AddSurveyParams } from '@/domain/usecases/survey/add-survey'
-import { SurveyAnswerOptionModel } from '@/domain/models/survey'
+import { mockAddSurveyParams } from '@/domain/usecases/survey'
 import { MongoHelper } from '@/infra/db/mongodb/helpers/mongo-helper'
 import app from '@/main/config/app'
 import env from '@/main/config/env'
@@ -45,27 +44,12 @@ const makeAccessToken = async (): Promise<string> => {
   return accessToken
 }
 
-const makeFakeSurveyAnswerOptions = (): SurveyAnswerOptionModel[] => {
-  return [{
-    answer: 'any_answer',
-    imagePath: 'https://image.path/locale.jpg'
-  }, {
-    answer: 'another_answer'
-  }]
-}
-
-const makeFakeSurveyData = (): AddSurveyParams => ({
-  question: 'any_question',
-  answerOptions: makeFakeSurveyAnswerOptions(),
-  date: new Date()
-})
-
 describe('Survey Routes', () => {
   describe('POST /survey', () => {
     test('Should return 403 on add survey without accessToken', async () => {
       await request(app)
         .post('/api/polls')
-        .send(makeFakeSurveyData())
+        .send(mockAddSurveyParams())
         .expect(403)
     })
 
@@ -74,7 +58,7 @@ describe('Survey Routes', () => {
       await request(app)
         .post('/api/polls')
         .set('x-access-token', accessToken)
-        .send(makeFakeSurveyData())
+        .send(mockAddSurveyParams())
         .expect(204)
     })
   })
@@ -99,7 +83,7 @@ describe('Survey Routes', () => {
     test('Should return 200 on load polls success', async () => {
       const accessToken = await makeAccessToken()
       await surveyCollection.insertMany([
-        makeFakeSurveyData()
+        mockAddSurveyParams()
       ])
 
       await request(app)

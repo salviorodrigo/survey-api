@@ -1,11 +1,12 @@
-import app from '@/main/config/app'
-import request from 'supertest'
+import { mockAddSurveyParams } from '@/domain/usecases/survey'
+import { mockAddAccountParams } from '@/domain/usecases/account'
+import { mockSaveSurveyAnswerParams } from '@/domain/usecases/survey-answer'
 import { MongoHelper } from '@/infra/db/mongodb/helpers/mongo-helper'
-import { Collection } from 'mongodb'
-import { SurveyAnswerOptionModel } from '@/domain/models'
-import { AddSurveyParams } from '@/domain/usecases/survey'
-import { sign } from 'jsonwebtoken'
+import app from '@/main/config/app'
 import env from '@/main/config/env'
+import request from 'supertest'
+import { Collection } from 'mongodb'
+import { sign } from 'jsonwebtoken'
 
 let surveyCollection: Collection
 let accountCollection: Collection
@@ -26,11 +27,7 @@ beforeEach(async () => {
 })
 
 const makeAccessToken = async (): Promise<string> => {
-  const res = await accountCollection.insertOne({
-    name: 'any_name',
-    email: 'any_email@mail.com',
-    password: 'hash_password'
-  })
+  const res = await accountCollection.insertOne(mockAddAccountParams())
   const id = res.ops[0]._id
   const accessToken = sign({ id }, env.jwtSecret)
   await accountCollection.updateOne({
@@ -44,44 +41,25 @@ const makeAccessToken = async (): Promise<string> => {
   return accessToken
 }
 
-const makeFakeSurveyAnswerOptions = (): SurveyAnswerOptionModel[] => {
-  return [{
-    answer: 'any_answer',
-    imagePath: 'https://image.path/locale.jpg'
-  }, {
-    answer: 'another_answer'
-  }]
-}
-
-const makeFakeSurveyData = (): AddSurveyParams => ({
-  question: 'any_question',
-  answerOptions: makeFakeSurveyAnswerOptions(),
-  date: new Date()
-})
-
-const fakeSurveyAnswerData = {
-  answer: 'any_answer'
-}
-
 describe('Survey Routes', () => {
   describe('PUT /polls/:surveyId/answers', () => {
     test('Should return 403 on save survey without accessToken', async () => {
       await request(app)
         .put('/api/polls/any_id/answers')
-        .send(fakeSurveyAnswerData)
+        .send(mockSaveSurveyAnswerParams())
         .expect(403)
     })
 
     test('Should return 200 on save survey with accessToken', async () => {
       const accessToken = await makeAccessToken()
       const surveyId: string = (await surveyCollection.insertOne(
-        makeFakeSurveyData()
+        Object.assign({}, mockAddSurveyParams(), { date: new Date() })
       )).ops[0]._id
 
       await request(app)
         .put(`/api/polls/${surveyId}/answers`)
         .set('x-access-token', accessToken)
-        .send(fakeSurveyAnswerData)
+        .send({ answer: mockSaveSurveyAnswerParams().answer })
         .expect(200)
     })
   })

@@ -1,9 +1,7 @@
 import { LoadPollsController } from './load-polls-controller'
-import {
-  SurveyModel,
-  LoadPolls,
-  SurveyAnswerOptionModel
-} from './load-polls-controller-protocols'
+import { LoadPolls } from './load-polls-controller-protocols'
+import { mockLoadPolls } from '@/domain/usecases/survey'
+import { mockSurveyModel } from '@/domain/models'
 import { noContent, ok, serverError } from '@/presentation/helpers/http/http-helper'
 import MockDate from 'mockdate'
 
@@ -15,45 +13,13 @@ afterAll(() => {
   MockDate.reset()
 })
 
-const makeFakeSurveyAnswerOptions = (): SurveyAnswerOptionModel[] => {
-  return [{
-    answer: 'any_answer',
-    imagePath: 'https://image.path/locale.jpg'
-  }, {
-    answer: 'another_answer'
-  }]
-}
-
-const makeFakePolls = (): SurveyModel[] => {
-  return [{
-    id: 'any_id',
-    question: 'any_question',
-    answerOptions: makeFakeSurveyAnswerOptions(),
-    date: new Date()
-  }, {
-    id: 'another_id',
-    question: 'another_question',
-    answerOptions: makeFakeSurveyAnswerOptions(),
-    date: new Date()
-  }]
-}
-
-const makeLoadPollsStub = (): LoadPolls => {
-  class LoadPollsStub implements LoadPolls {
-    async load (): Promise<SurveyModel[]> {
-      return await Promise.resolve(makeFakePolls())
-    }
-  }
-  return new LoadPollsStub()
-}
-
 type SutTypes = {
   sut: LoadPollsController
   pollsLoaderStub: LoadPolls
 }
 
 const makeSut = (): SutTypes => {
-  const loadPollsStub = makeLoadPollsStub()
+  const loadPollsStub = mockLoadPolls()
   const sut = new LoadPollsController(loadPollsStub)
   return {
     sut,
@@ -72,7 +38,7 @@ describe('LoadPolls Controller', () => {
   test('Should returns 200 on success', async () => {
     const { sut } = makeSut()
     const httpResponse = await sut.handle({})
-    expect(httpResponse).toEqual(ok(makeFakePolls()))
+    expect(httpResponse).toEqual(ok([mockSurveyModel(), mockSurveyModel()]))
   })
 
   test('Should returns 204 if LoadPolls returns empty', async () => {
@@ -84,9 +50,7 @@ describe('LoadPolls Controller', () => {
 
   test('Should return 500 if LoadPolls throws', async () => {
     const { sut, pollsLoaderStub: loadPollsStub } = makeSut()
-    jest.spyOn(loadPollsStub, 'load').mockImplementationOnce(() => {
-      throw new Error()
-    })
+    jest.spyOn(loadPollsStub, 'load').mockRejectedValueOnce(new Error())
     const httpResponse = await sut.handle({})
     expect(httpResponse).toEqual(serverError(new Error()))
   })

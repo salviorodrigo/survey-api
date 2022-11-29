@@ -2,11 +2,15 @@ import { AddSurveyController } from './add-survey-controller'
 import {
   Validator,
   HttpRequest,
-  AddSurvey,
-  AddSurveyParams,
-  SurveyAnswerOptionModel
+  AddSurvey
 } from './add-survey-controller-protocols'
-import { badRequest, serverError, noContent } from '@/presentation/helpers/http/http-helper'
+import { mockAddSurvey, mockAddSurveyParams } from '@/domain/usecases/survey'
+import { mockValidator } from '@/presentation/protocols'
+import {
+  badRequest,
+  serverError,
+  noContent
+} from '@/presentation/helpers/http/http-helper'
 import MockDate from 'mockdate'
 
 beforeAll(() => {
@@ -17,38 +21,9 @@ afterAll(() => {
   MockDate.reset()
 })
 
-const makeFakeSurveyAnswerOptions = (): SurveyAnswerOptionModel[] => {
-  return [{
-    answer: 'any_answer',
-    imagePath: 'https://image.path/locale.jpg'
-  }, {
-    answer: 'another_answer'
-  }]
-}
-
 const makeFakeRequest = (): HttpRequest => ({
-  body: {
-    question: 'any_question',
-    answerOptions: makeFakeSurveyAnswerOptions(),
-    date: new Date()
-  }
+  body: Object.assign({}, mockAddSurveyParams())
 })
-
-const makeValidatorStub = (): Validator => {
-  class ValidatorStub implements Validator {
-    validate (input: any): Error | null {
-      return null
-    }
-  }
-  return new ValidatorStub()
-}
-
-const makeAddSurveyStub = (): AddSurvey => {
-  class AddSurveyStub implements AddSurvey {
-    async add (data: AddSurveyParams): Promise<void> {}
-  }
-  return new AddSurveyStub()
-}
 
 type SutTypes = {
   sut: AddSurveyController
@@ -57,8 +32,8 @@ type SutTypes = {
 }
 
 const makeSut = (): SutTypes => {
-  const validatorStub = makeValidatorStub()
-  const surveyAdderStub = makeAddSurveyStub()
+  const validatorStub = mockValidator()
+  const surveyAdderStub = mockAddSurvey()
   const sut = new AddSurveyController(validatorStub, surveyAdderStub)
   return {
     sut,
@@ -94,9 +69,7 @@ describe('AddSurvey Controller', () => {
 
   test('Should return 500 if AddSurvey throws', async () => {
     const { sut, addSurveyStub } = makeSut()
-    jest.spyOn(addSurveyStub, 'add').mockImplementationOnce(() => {
-      throw new Error()
-    })
+    jest.spyOn(addSurveyStub, 'add').mockRejectedValueOnce(new Error())
     const httpResponse = await sut.handle(makeFakeRequest())
     expect(httpResponse).toEqual(serverError(new Error()))
   })

@@ -4,10 +4,12 @@ import {
   AccountModel,
   SurveyModel
 } from './survey-answer-mongo-repository-protocols'
+import { SurveyAnswerModel } from '@/domain/models/survey-answer'
+import { mockAddAccountParams } from '@/domain/usecases/account'
+import { mockAddSurveyParams } from '@/domain/usecases/survey'
 import { MongoHelper } from '@/infra/db/mongodb/helpers/mongo-helper'
 import { Collection } from 'mongodb'
 import MockDate from 'mockdate'
-import { SurveyAnswerModel } from '@/domain/models/survey-answer'
 
 let accountCollection: Collection
 let surveyCollection: Collection
@@ -33,26 +35,12 @@ beforeEach(async () => {
 })
 
 const createFakeAccount = async (): Promise<AccountModel> => {
-  const account = await (await accountCollection.insertOne({
-    name: 'any_name',
-    email: 'any_email@mail.com',
-    password: 'hash_password'
-  })).ops[0]
-
+  const account = await (await accountCollection.insertOne(mockAddAccountParams())).ops[0]
   return MongoHelper.map(account)
 }
 
 const createFakeSurvey = async (): Promise<SurveyModel> => {
-  const survey = await (await surveyCollection.insertOne({
-    question: 'any_question',
-    answerOptions: [{
-      answer: 'any_answer',
-      imagePath: 'https://image.path/locale.jpg'
-    }, {
-      answer: 'another_answer'
-    }],
-    date: new Date()
-  })).ops[0]
+  const survey = await (await surveyCollection.insertOne(mockAddSurveyParams())).ops[0]
   return MongoHelper.map(survey)
 }
 

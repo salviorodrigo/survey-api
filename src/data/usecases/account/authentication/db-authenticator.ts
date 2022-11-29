@@ -20,6 +20,7 @@ export class DbAuthenticator implements Authenticator {
       fillable: false,
       accessToken: null
     }
+
     const account = await this.loadAccountByEmailRepository.loadByEmail(credentials.email)
 
     if (!thisResponse.fillable) {

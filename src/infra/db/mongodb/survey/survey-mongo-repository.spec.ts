@@ -1,9 +1,9 @@
 import { SurveyMongoRepository } from './survey-mongo-repository'
-import { mockAddSurveyParams } from '@/domain/usecases/survey'
+import { mockSurveyModel } from '@/domain/models/mocks'
+import { mockAddSurveyParams } from '@/domain/usecases/survey/mocks'
 import { MongoHelper } from '@/infra/db/mongodb/helpers/mongo-helper'
 import { Collection } from 'mongodb'
 import MockDate from 'mockdate'
-import { mockSurveyModel } from '../survey-answer/survey-answer-mongo-repository-protocols'
 
 let surveyCollection: Collection
 

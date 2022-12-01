@@ -1,7 +1,7 @@
 import { LoadPollsController } from './load-polls-controller'
 import { LoadPolls } from './load-polls-controller-protocols'
-import { mockLoadPolls } from '@/domain/usecases/survey'
-import { mockSurveyModel } from '@/domain/models'
+import { mockLoadPolls } from '@/domain/usecases/survey/mocks'
+import { mockSurveyModel } from '@/domain/models/mocks'
 import { noContent, ok, serverError } from '@/presentation/helpers/http/http-helper'
 import MockDate from 'mockdate'
 

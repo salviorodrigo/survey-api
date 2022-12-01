@@ -4,10 +4,10 @@ import {
   AddAccountRepository,
   LoadAccountByEmailRepository
 } from './db-add-account-protocols'
-import { mockAddAccountParams } from '@/domain/usecases/account'
-import { mockAccountModel } from '@/domain/models'
-import { mockHasher } from '@/data/protocols/cryptography'
-import { mockAddAccountRepository, mockLoadAccountByEmailRepository } from '@/data/protocols/db/account'
+import { mockAddAccountParams } from '@/domain/usecases/account/mocks'
+import { mockAccountModel } from '@/domain/models/mocks'
+import { mockHasher } from '@/data/protocols/cryptography/mocks'
+import { mockAddAccountRepository, mockLoadAccountByEmailRepository } from '@/data/protocols/db/account/mocks'
 
 type SutTypes = {
   sut: DbAddAccount

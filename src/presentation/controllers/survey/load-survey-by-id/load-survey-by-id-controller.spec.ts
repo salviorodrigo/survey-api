@@ -4,9 +4,9 @@ import {
   LoadSurveyById,
   Validator
 } from './load-survey-by-id-controller-protocols'
-import { mockLoadSurveyById } from '@/domain/usecases/survey'
-import { mockSurveyModel } from '@/domain/models'
-import { mockValidator } from '@/presentation/protocols'
+import { mockLoadSurveyById } from '@/domain/usecases/survey/mocks'
+import { mockSurveyModel } from '@/domain/models/mocks'
+import { mockValidator } from '@/presentation/protocols/mocks'
 import { badRequest, ok, serverError } from '@/presentation/helpers/http/http-helper'
 import { InvalidParamError } from '@/presentation/errors'
 import MockDate from 'mockdate'

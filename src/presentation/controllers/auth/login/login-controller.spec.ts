@@ -10,9 +10,9 @@ import {
   unauthorized,
   ok
 } from '@/presentation/helpers/http/http-helper'
-import { mockAuthenticator } from '@/domain/usecases/account'
 import { MissingParamError } from '@/presentation/errors'
-import { mockValidator } from '@/presentation/protocols/validator.mock'
+import { mockAuthenticator } from '@/domain/usecases/account/mocks'
+import { mockValidator } from '@/presentation/protocols/mocks'
 
 const makeFakeRequest = (): HttpRequest => ({
   body: {

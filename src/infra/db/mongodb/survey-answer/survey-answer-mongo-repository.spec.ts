@@ -5,8 +5,8 @@ import {
   SurveyModel
 } from './survey-answer-mongo-repository-protocols'
 import { SurveyAnswerModel } from '@/domain/models/survey-answer'
-import { mockAddAccountParams } from '@/domain/usecases/account'
-import { mockAddSurveyParams } from '@/domain/usecases/survey'
+import { mockAddAccountParams } from '@/domain/usecases/account/mocks'
+import { mockAddSurveyParams } from '@/domain/usecases/survey/mocks'
 import { MongoHelper } from '@/infra/db/mongodb/helpers/mongo-helper'
 import { Collection } from 'mongodb'
 import MockDate from 'mockdate'

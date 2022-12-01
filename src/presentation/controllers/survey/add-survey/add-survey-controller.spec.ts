@@ -4,13 +4,13 @@ import {
   HttpRequest,
   AddSurvey
 } from './add-survey-controller-protocols'
-import { mockAddSurvey, mockAddSurveyParams } from '@/domain/usecases/survey'
-import { mockValidator } from '@/presentation/protocols'
 import {
   badRequest,
   serverError,
   noContent
 } from '@/presentation/helpers/http/http-helper'
+import { mockAddSurvey, mockAddSurveyParams } from '@/domain/usecases/survey/mocks'
+import { mockValidator } from '@/presentation/protocols/mocks'
 import MockDate from 'mockdate'
 
 beforeAll(() => {

@@ -5,10 +5,10 @@ import {
   Validator,
   SaveSurveyAnswer
 } from './save-survey-answer-controller-protocols'
-import { mockLoadSurveyById } from '@/domain/usecases/survey'
-import { mockSaveSurveyAnswer, mockSaveSurveyAnswerParams } from '@/domain/usecases/survey-answer'
-import { mockSurveyAnswerModel } from '@/domain/models'
-import { mockValidator } from '@/presentation/protocols'
+import { mockLoadSurveyById } from '@/domain/usecases/survey/mocks'
+import { mockSaveSurveyAnswer, mockSaveSurveyAnswerParams } from '@/domain/usecases/survey-answer/mocks'
+import { mockSurveyAnswerModel } from '@/domain/models/mocks'
+import { mockValidator } from '@/presentation/protocols/mocks'
 import { badRequest, ok, serverError } from '@/presentation/helpers/http/http-helper'
 import { InvalidParamError } from '@/presentation/errors'
 import MockDate from 'mockdate'

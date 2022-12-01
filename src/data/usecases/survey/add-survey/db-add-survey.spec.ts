@@ -1,7 +1,7 @@
 import { DbAddSurvey } from './db-add-survey'
 import { AddSurveyRepository } from './db-add-survey-protocols'
-import { mockSurveyModel } from '@/domain/models'
-import { mockAddSurveyRepository } from '@/data/protocols/db/survey'
+import { mockSurveyModel } from '@/domain/models/mocks'
+import { mockAddSurveyRepository } from '@/data/protocols/db/survey/mocks'
 import MockDate from 'mockdate'
 
 beforeAll(() => {

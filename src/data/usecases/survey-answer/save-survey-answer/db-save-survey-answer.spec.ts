@@ -1,9 +1,9 @@
 import { DbSaveSurveyAnswer } from './db-save-survey-answer'
 import { SaveSurveyAnswerRepository } from './db-save-survey-answer-protocols'
-import { mockSaveSurveyAnswerParams } from '@/domain/usecases/survey-answer'
-import { mockSaveSurveyAnswerRepository } from '@/data/protocols/db/survey-answer'
+import { mockSurveyAnswerModel } from '@/domain/models/mocks'
+import { mockSaveSurveyAnswerParams } from '@/domain/usecases/survey-answer/mocks'
+import { mockSaveSurveyAnswerRepository } from '@/data/protocols/db/survey-answer/mocks'
 import MockDate from 'mockdate'
-import { mockSurveyAnswerModel } from '@/domain/models'
 
 beforeAll(() => {
   MockDate.set(new Date())

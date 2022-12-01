@@ -1,5 +1,4 @@
 export * from './controllers'
 export * from './http'
 export * from './validator'
-export * from './validator.mock'
 export * from './middleware'

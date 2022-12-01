@@ -5,8 +5,6 @@ import {
   HttpRequest,
   Authenticator
 } from './signup-controller-protocols'
-import { mockAddAccount, mockAuthenticator } from '@/domain/usecases/account'
-import { mockAccountModel } from '@/domain/models'
 import { MissingParamError, EmailTakenError } from '@/presentation/errors'
 import {
   ok,
@@ -14,7 +12,9 @@ import {
   serverError,
   forbidden
 } from '@/presentation/helpers/http/http-helper'
-import { mockValidator } from '@/presentation/protocols'
+import { mockAccountModel } from '@/domain/models/mocks'
+import { mockAddAccount, mockAuthenticator } from '@/domain/usecases/account/mocks'
+import { mockValidator } from '@/presentation/protocols/mocks'
 
 const makeFakeRequest = (): HttpRequest => ({
   body: {

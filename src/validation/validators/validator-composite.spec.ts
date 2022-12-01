@@ -1,7 +1,7 @@
 import { ValidatorComposite } from './validator-composite'
 import { MissingParamError } from '@/presentation/errors/missing-param-error'
 import { Validator } from '@/presentation/protocols'
-import { mockValidator } from '@/presentation/protocols/validator.mock'
+import { mockValidator } from '@/presentation/protocols/mocks'
 
 type SutTypes = {
   sut: ValidatorComposite

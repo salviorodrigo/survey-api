@@ -1,5 +1,5 @@
 import { AccountMongoRepository } from './account-mongo-repository'
-import { mockAddAccountParams } from '@/domain/usecases/account'
+import { mockAddAccountParams } from '@/domain/usecases/account/mocks'
 import { MongoHelper } from '@/infra/db/mongodb/helpers/mongo-helper'
 import { Collection } from 'mongodb'
 

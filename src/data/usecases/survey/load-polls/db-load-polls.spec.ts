@@ -1,7 +1,7 @@
 import { DbLoadPolls } from './db-load-polls'
 import { LoadPollsRepository } from './db-load-polls-protocols'
-import { mockSurveyModel } from '@/domain/models'
-import { mockLoadPollsRepository } from '@/data/protocols/db/survey'
+import { mockSurveyModel } from '@/domain/models/mocks'
+import { mockLoadPollsRepository } from '@/data/protocols/db/survey/mocks'
 import MockDate from 'mockdate'
 
 beforeAll(() => {

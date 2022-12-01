@@ -1,4 +1,4 @@
-import { mockAddSurveyParams } from '@/domain/usecases/survey'
+import { mockAddSurveyParams } from '@/domain/usecases/survey/mocks'
 import { MongoHelper } from '@/infra/db/mongodb/helpers/mongo-helper'
 import app from '@/main/config/app'
 import env from '@/main/config/env'

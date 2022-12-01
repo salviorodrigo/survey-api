@@ -3,6 +3,6 @@
     "exclude": [
        "**/*.spec.ts",
        "**/*.test.ts", 
-       "**/*.mock.ts" 
+       "**/mocks/**" 
     ]
 }

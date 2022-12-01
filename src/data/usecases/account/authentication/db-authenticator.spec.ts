@@ -1,7 +1,3 @@
-import { mockEncrypter, mockHashComparer } from '@/data/protocols/cryptography'
-import { mockLoadAccountByEmailRepository, mockUpdateAccessTokenRepository } from '@/data/protocols/db/account'
-import { mockAccountModel } from '@/domain/models'
-import { mockAuthenticatorParams } from '@/domain/usecases/account'
 import { DbAuthenticator } from './db-authenticator'
 import {
   HashComparer,
@@ -9,6 +5,10 @@ import {
   LoadAccountByEmailRepository,
   UpdateAccessTokenRepository
 } from './db-authenticator-protocols'
+import { mockAccountModel } from '@/domain/models/mocks'
+import { mockAuthenticatorParams } from '@/domain/usecases/account/mocks'
+import { mockEncrypter, mockHashComparer } from '@/data/protocols/cryptography/mocks'
+import { mockLoadAccountByEmailRepository, mockUpdateAccessTokenRepository } from '@/data/protocols/db/account/mocks'
 
 type SutTypes = {
   sut: DbAuthenticator

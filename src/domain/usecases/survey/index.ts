@@ -1,6 +1,3 @@
 export * from './add-survey'
-export * from './add-survey.mock'
 export * from './load-polls'
-export * from './load-polls.mock'
 export * from './load-survey-by-id'
-export * from './load-survey-by-id.mock'

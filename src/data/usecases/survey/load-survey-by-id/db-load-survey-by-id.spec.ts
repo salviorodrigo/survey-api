@@ -1,8 +1,8 @@
 import { DbLoadSurveyById } from './db-load-survey-by-id'
 import { LoadSurveyByIdRepository } from './db-load-survey-by-id-protocols'
-import { mockLoadSurveyByIdRepository } from '@/data/protocols/db/survey'
+import { mockSurveyModel } from '@/domain/models/mocks'
+import { mockLoadSurveyByIdRepository } from '@/data/protocols/db/survey/mocks'
 import MockDate from 'mockdate'
-import { mockSurveyModel } from '@/domain/models'
 
 beforeAll(() => {
   MockDate.set(new Date())

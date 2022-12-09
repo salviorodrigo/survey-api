@@ -18,7 +18,6 @@ const makeFakeRequest = (): HttpRequest => ({
 const makeFakeServerError = (): HttpResponse => {
   const fakeError = new Error()
   fakeError.stack = 'any_stack'
-
   return serverError(fakeError)
 }
 
@@ -45,31 +44,23 @@ describe('LogController Decorator', () => {
   test('Should call controller handler', async () => {
     const { sut, controllerStub } = makeSut()
     const handleSpy = jest.spyOn(controllerStub, 'handle')
-
     const httpRequest = makeFakeRequest()
-
     await sut.handle(httpRequest)
     expect(handleSpy).toHaveBeenCalledWith(httpRequest)
   })
 
   test('Should return the same result of the controller', async () => {
     const { sut } = makeSut()
-
     const httpRequest = makeFakeRequest()
-
     const httpResponse = await sut.handle(httpRequest)
     expect(httpResponse).toEqual(ok(mockAccountModel()))
   })
 
   test('Should call LogErrorRepository with correct values if controller returns a server error', async () => {
     const { sut, controllerStub, logErrorRepositoryStub } = makeSut()
-
     jest.spyOn(controllerStub, 'handle').mockReturnValueOnce(new Promise(resolve => resolve(makeFakeServerError())))
-
     const errorSpy = jest.spyOn(logErrorRepositoryStub, 'logError')
-
     const httpRequest = makeFakeRequest()
-
     await sut.handle(httpRequest)
     expect(errorSpy).toHaveBeenCalledWith(makeFakeServerError().body.stack)
   })

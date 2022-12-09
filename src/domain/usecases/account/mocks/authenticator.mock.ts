@@ -8,7 +8,7 @@ export const mockAuthenticatorParams = (): AuthenticatorParams => ({
 
 export const mockAuthenticator = (): Authenticator => {
   class AuthenticatorStub implements Authenticator {
-    async auth (credentials: AuthenticatorParams): Promise<string> {
+    async auth (credentials: AuthenticatorParams): Promise<string | undefined> {
       return mockAccountModel().accessToken
     }
   }

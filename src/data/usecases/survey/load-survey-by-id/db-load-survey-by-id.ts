@@ -7,10 +7,10 @@ import {
 export class DbLoadSurveyById implements LoadSurveyById {
   constructor (private readonly loadPollsRepository: LoadSurveyByIdRepository) {}
 
-  async loadById (id: string): Promise<SurveyModel> {
+  async loadById (id: string): Promise<SurveyModel | null> {
     const thisResponse = {
       filled: false,
-      data: null
+      data: null as unknown as SurveyModel
     }
 
     if (!thisResponse.filled) {

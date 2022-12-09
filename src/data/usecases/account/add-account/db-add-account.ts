@@ -17,13 +17,12 @@ export class DbAddAccount implements AddAccount {
   async add (account: AddAccountParams): Promise<AccountModel | null> {
     const thisResponse = {
       filled: false,
-      newAccount: null
+      data: null as unknown as AccountModel
     }
 
     if (!thisResponse.filled) {
       if ((await this.loadAccountByEmailRepository.loadByEmail(account.email)) !== null) {
         thisResponse.filled = true
-        thisResponse.newAccount = null
       }
     }
 
@@ -31,10 +30,10 @@ export class DbAddAccount implements AddAccount {
       const hashedPassword = await this.hasher.hash(account.password)
       const accountData = Object.assign({}, account, { password: hashedPassword })
 
-      thisResponse.newAccount = await this.addAccountRepository.add(accountData)
+      thisResponse.data = await this.addAccountRepository.add(accountData)
       thisResponse.filled = true
     }
 
-    return thisResponse.newAccount
+    return thisResponse.data
   }
 }

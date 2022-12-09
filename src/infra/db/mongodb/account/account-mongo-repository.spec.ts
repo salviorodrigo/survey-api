@@ -5,7 +5,7 @@ import { Collection } from 'mongodb'
 
 let accountCollection: Collection
 beforeAll(async () => {
-  await MongoHelper.connect(process.env.MONGO_URL)
+  await MongoHelper.connect(process.env.MONGO_URL as string)
 })
 
 afterAll(async () => {
@@ -40,10 +40,10 @@ describe('Account Mongo Repository', () => {
       await sut.add(mockAddAccountParams())
       const account = await sut.loadByEmail('any_email@mail.com')
       expect(account).toBeTruthy()
-      expect(account.id).toBeTruthy()
-      expect(account.name).toBe('any_name')
-      expect(account.email).toBe('any_email@mail.com')
-      expect(account.password).toBe('any_password')
+      expect(account?.id).toBeTruthy()
+      expect(account?.name).toBe('any_name')
+      expect(account?.email).toBe('any_email@mail.com')
+      expect(account?.password).toBe('any_password')
     })
 
     test('Should return null on loadByEmail fails', async () => {
@@ -60,7 +60,7 @@ describe('Account Mongo Repository', () => {
       expect(account.accessToken).toBeFalsy()
       await sut.updateAccessToken(account.id, 'valid_accessToken')
       const accountWithAccessToken = await sut.loadByEmail(account.email)
-      expect(accountWithAccessToken.accessToken).toBe('valid_accessToken')
+      expect(accountWithAccessToken?.accessToken).toBe('valid_accessToken')
     })
   })
 
@@ -88,10 +88,10 @@ describe('Account Mongo Repository', () => {
       })
       const account = await sut.loadByToken('any_token', 'admin')
       expect(account).toBeTruthy()
-      expect(account.id).toBeTruthy()
-      expect(account.name).toBe('any_name')
-      expect(account.email).toBe('any_email@mail.com')
-      expect(account.password).toBe('any_password')
+      expect(account?.id).toBeTruthy()
+      expect(account?.name).toBe('any_name')
+      expect(account?.email).toBe('any_email@mail.com')
+      expect(account?.password).toBe('any_password')
     })
 
     test('Should return if on loadByToken with invalid role', async () => {
@@ -117,10 +117,10 @@ describe('Account Mongo Repository', () => {
       })
       const account = await sut.loadByToken('any_token')
       expect(account).toBeTruthy()
-      expect(account.id).toBeTruthy()
-      expect(account.name).toBe('any_name')
-      expect(account.email).toBe('any_email@mail.com')
-      expect(account.password).toBe('any_password')
+      expect(account?.id).toBeTruthy()
+      expect(account?.name).toBe('any_name')
+      expect(account?.email).toBe('any_email@mail.com')
+      expect(account?.password).toBe('any_password')
     })
 
     test('Should return null on loadByToken fails', async () => {

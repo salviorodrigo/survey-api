@@ -5,6 +5,7 @@
     "Encrypter",
     "middlewares",
     "Salvio",
+    "upserted",
     "Usecase",
     "usecases"
   ]

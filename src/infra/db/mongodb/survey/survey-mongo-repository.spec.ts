@@ -8,7 +8,7 @@ import MockDate from 'mockdate'
 let surveyCollection: Collection
 
 beforeAll(async () => {
-  await MongoHelper.connect(process.env.MONGO_URL)
+  await MongoHelper.connect(process.env.MONGO_URL as string)
   MockDate.set(new Date())
 })
 
@@ -64,15 +64,15 @@ describe('Survey Mongo Repository', () => {
   describe('loadById()', () => {
     test('Should load a survey on success', async () => {
       const fakeSurvey = mockAddSurveyParams()
-      const id = await (
+      const id = (
         await surveyCollection.insertOne(fakeSurvey)
-      ).ops[0]._id
+      ).insertedId.toString()
       const sut = makeSut()
       const survey = await sut.loadById(id)
 
-      expect(survey.id).toBeTruthy()
-      expect(survey.question).toEqual(fakeSurvey.question)
-      expect(survey.answerOptions).toEqual(fakeSurvey.answerOptions)
+      expect(survey?.id).toBeTruthy()
+      expect(survey?.question).toEqual(fakeSurvey.question)
+      expect(survey?.answerOptions).toEqual(fakeSurvey.answerOptions)
     })
 
     test('Should return null if survey.id doesn\'t exists', async () => {

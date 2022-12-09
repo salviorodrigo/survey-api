@@ -11,7 +11,7 @@ export class DbSaveSurveyAnswer implements SaveSurveyAnswer {
   async save (surveyAnswerData: SaveSurveyAnswerParams): Promise<SurveyAnswerModel | null> {
     const thisResponse = {
       filled: false,
-      data: null
+      data: null as unknown as SurveyAnswerModel
     }
     if (!thisResponse.filled) {
       const surveyAnswer = await this.saveSurveyAnswerRepository.save(surveyAnswerData)

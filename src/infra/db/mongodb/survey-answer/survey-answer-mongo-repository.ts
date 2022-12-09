@@ -8,7 +8,7 @@ import { MongoHelper } from '../helpers/mongo-helper'
 export class SurveyAnswerMongoRepository implements SaveSurveyAnswerRepository {
   async save (surveyAnswerData: SaveSurveyAnswerParams): Promise<SurveyAnswerModel> {
     const surveyAnswerCollection = await MongoHelper.getCollection('survey_answers')
-    const surveyAnswer = await surveyAnswerCollection.findOneAndUpdate({
+    await surveyAnswerCollection.findOneAndUpdate({
       surveyId: surveyAnswerData.surveyId,
       accountId: surveyAnswerData.accountId
     }, {
@@ -17,9 +17,12 @@ export class SurveyAnswerMongoRepository implements SaveSurveyAnswerRepository {
         date: new Date()
       }
     }, {
-      upsert: true,
-      returnOriginal: false
+      upsert: true
     })
-    return MongoHelper.map(surveyAnswer.value)
+    const surveyAnswer = await surveyAnswerCollection.findOne({
+      surveyId: surveyAnswerData.surveyId,
+      accountId: surveyAnswerData.accountId
+    })
+    return MongoHelper.map(surveyAnswer)
   }
 }

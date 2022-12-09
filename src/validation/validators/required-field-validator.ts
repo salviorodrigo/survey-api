@@ -5,7 +5,7 @@ export class RequiredFieldValidator implements Validator {
   constructor (private readonly requiredFieldName: string) {}
 
   validate (input: any): Error {
-    let thisResponse = null as Error
+    let thisResponse = null as unknown as Error
 
     if (!input[this.requiredFieldName]) {
       thisResponse = new MissingParamError(this.requiredFieldName)

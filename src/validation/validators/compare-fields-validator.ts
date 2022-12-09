@@ -8,7 +8,7 @@ export class CompareFieldsValidator implements Validator {
   ) {}
 
   validate (input: any): Error {
-    let thisResponse = null as Error
+    let thisResponse = null as unknown as Error
 
     if (input[this.fieldName] !== input[this.confirmationFieldName]) {
       thisResponse = new InvalidParamError(this.confirmationFieldName)

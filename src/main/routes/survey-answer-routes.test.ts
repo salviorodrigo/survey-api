@@ -12,7 +12,7 @@ let surveyCollection: Collection
 let accountCollection: Collection
 
 beforeAll(async () => {
-  await MongoHelper.connect(process.env.MONGO_URL)
+  await MongoHelper.connect(process.env.MONGO_URL as string)
 })
 
 afterAll(async () => {
@@ -28,7 +28,7 @@ beforeEach(async () => {
 
 const makeAccessToken = async (): Promise<string> => {
   const res = await accountCollection.insertOne(mockAddAccountParams())
-  const id = res.ops[0]._id
+  const id = res.insertedId
   const accessToken = sign({ id }, env.jwtSecret)
   await accountCollection.updateOne({
     _id: id
@@ -52,9 +52,9 @@ describe('Survey Routes', () => {
 
     test('Should return 200 on save survey with accessToken', async () => {
       const accessToken = await makeAccessToken()
-      const surveyId: string = (await surveyCollection.insertOne(
+      const surveyId = (await surveyCollection.insertOne(
         Object.assign({}, mockAddSurveyParams(), { date: new Date() })
-      )).ops[0]._id
+      )).insertedId.toString()
 
       await request(app)
         .put(`/api/polls/${surveyId}/answers`)

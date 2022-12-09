@@ -5,7 +5,7 @@ import { Collection } from 'mongodb'
 let errorCollection: Collection
 
 beforeAll(async () => {
-  await MongoHelper.connect(process.env.MONGO_URL)
+  await MongoHelper.connect(process.env.MONGO_URL as string)
 })
 
 afterAll(async () => {

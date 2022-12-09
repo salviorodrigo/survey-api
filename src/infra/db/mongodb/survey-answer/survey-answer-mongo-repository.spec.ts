@@ -16,7 +16,7 @@ let surveyCollection: Collection
 let surveyAnswerCollection: Collection
 
 beforeAll(async () => {
-  await MongoHelper.connect(process.env.MONGO_URL)
+  await MongoHelper.connect(process.env.MONGO_URL as string)
   MockDate.set(new Date())
 })
 
@@ -35,12 +35,14 @@ beforeEach(async () => {
 })
 
 const createFakeAccount = async (): Promise<AccountModel> => {
-  const account = await (await accountCollection.insertOne(mockAddAccountParams())).ops[0]
+  const accountId = (await accountCollection.insertOne(mockAddAccountParams())).insertedId
+  const account = await accountCollection.findOne(accountId)
   return MongoHelper.map(account)
 }
 
 const createFakeSurvey = async (): Promise<SurveyModel> => {
-  const survey = await (await surveyCollection.insertOne(mockAddSurveyParams())).ops[0]
+  const surveyId = (await surveyCollection.insertOne(mockAddSurveyParams())).insertedId
+  const survey = await surveyCollection.findOne(surveyId)
   return MongoHelper.map(survey)
 }
 
@@ -55,11 +57,11 @@ const makeFakeSurveyAnswerData = async (): Promise<SaveSurveyAnswerParams> => {
 }
 
 const createFakeSurveyAnswer = async (surveyAnswerData: SaveSurveyAnswerParams): Promise<SurveyAnswerModel> => {
-  return MongoHelper.map(await (
-    await surveyAnswerCollection.insertOne(
-      Object.assign({}, surveyAnswerData, { date: new Date() })
-    )
-  ).ops[0])
+  const surveyAnswerId = (await surveyAnswerCollection.insertOne(
+    Object.assign({}, surveyAnswerData, { date: new Date() })
+  )).insertedId
+  const surveyAnswer = await surveyAnswerCollection.findOne(surveyAnswerId)
+  return MongoHelper.map(surveyAnswer)
 }
 
 const makeSut = (): SurveyAnswerMongoRepository => {

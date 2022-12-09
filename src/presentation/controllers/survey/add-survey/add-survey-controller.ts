@@ -16,7 +16,7 @@ export class AddSurveyController implements Controller {
   async handle (httpRequest: HttpRequest): Promise<HttpResponse> {
     const thisResponse = {
       filled: false,
-      data: null as HttpResponse
+      data: null as unknown as HttpResponse
     }
 
     try {

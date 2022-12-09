@@ -10,7 +10,7 @@ let surveyCollection: Collection
 let accountCollection: Collection
 
 beforeAll(async () => {
-  await MongoHelper.connect(process.env.MONGO_URL)
+  await MongoHelper.connect(process.env.MONGO_URL as string)
 })
 
 afterAll(async () => {
@@ -31,7 +31,7 @@ const makeAccessToken = async (): Promise<string> => {
     password: 'hash_password',
     role: 'admin'
   })
-  const id = res.ops[0]._id
+  const id = res.insertedId
   const accessToken = sign({ id }, env.jwtSecret)
   await accountCollection.updateOne({
     _id: id

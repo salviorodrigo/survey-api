@@ -4,5 +4,5 @@ export type AuthenticatorParams = {
 }
 
 export interface Authenticator {
-  auth (credentials: AuthenticatorParams): Promise<string>
+  auth (credentials: AuthenticatorParams): Promise<string | undefined>
 }

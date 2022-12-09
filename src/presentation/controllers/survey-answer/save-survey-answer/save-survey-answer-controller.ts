@@ -19,7 +19,7 @@ export class SaveSurveyAnswerController implements Controller {
   async handle (httpRequest: HttpRequest): Promise<HttpResponse> {
     const thisResponse = {
       filled: false,
-      data: null
+      data: null as unknown as HttpResponse
     }
     try {
       const params = Object.assign({}, httpRequest.params, httpRequest.body, { accountId: httpRequest.accountId })
@@ -42,7 +42,7 @@ export class SaveSurveyAnswerController implements Controller {
         }
       }
       if (!thisResponse.filled) {
-        const surveyAnswerOption = survey.answerOptions.find(item => item.answer === answer)
+        const surveyAnswerOption = survey?.answerOptions.find(item => item.answer === answer)
         if (!surveyAnswerOption) {
           thisResponse.data = badRequest(new InvalidParamError('answer'))
           thisResponse.filled = true

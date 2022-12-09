@@ -9,7 +9,7 @@ export class EmailValidator implements Validator {
   ) {}
 
   validate (input: any): Error {
-    let thisResponse = null as Error
+    let thisResponse = null as unknown as Error
 
     if (!this.emailValidatorAdapter.isValid(input[this.emailFieldName])) {
       thisResponse = new InvalidParamError(this.emailFieldName)

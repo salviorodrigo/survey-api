@@ -11,9 +11,10 @@ import { MongoHelper } from '@/infra/db/mongodb/helpers/mongo-helper'
 export class AccountMongoRepository implements AddAccountRepository, LoadAccountByEmailRepository, UpdateAccessTokenRepository, LoadAccountByTokenRepository {
   async add (accountData: AddAccountParams): Promise<AccountModel> {
     const accountCollection = await MongoHelper.getCollection('accounts')
-    const result = await accountCollection.insertOne(accountData)
-    const account = MongoHelper.map(result.ops[0])
-    return await new Promise(resolve => resolve(account))
+    const accountId = (await accountCollection.insertOne(accountData)).insertedId
+    const result = await accountCollection.findOne(accountId)
+    const account = MongoHelper.map(result)
+    return await Promise.resolve(account)
   }
 
   async loadByEmail (email: string): Promise<AccountModel | null> {

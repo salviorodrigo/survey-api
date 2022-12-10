@@ -8,7 +8,8 @@ export class DbLoadSurveyAnswer implements LoadSurveyAnswer {
   ) {}
 
   async loadAnswersBySurveyId (surveyId: string): Promise<SurveyAnswerModel[]> {
-    await this.surveyAnswerLoader.loadAnswersBySurveyId(surveyId)
-    return await Promise.resolve([])
+    return await Promise.resolve(
+      this.surveyAnswerLoader.loadAnswersBySurveyId(surveyId)
+    )
   }
 }

@@ -32,5 +32,12 @@ describe('DbLoadSurveyAnswers Usecase', () => {
       const sutResponse = await sut.loadAnswersBySurveyId(mockSurveyModel().id)
       expect(sutResponse).toEqual([mockSurveyAnswerModel()])
     })
+
+    test('Should throw if SurveyAnswerModels throws', async () => {
+      const { sut, surveyAnswerLoaderStub } = makeSut()
+      jest.spyOn(surveyAnswerLoaderStub, 'loadAnswersBySurveyId').mockRejectedValueOnce(new Error())
+      const sutResponse = sut.loadAnswersBySurveyId(mockSurveyModel().id)
+      await expect(sutResponse).rejects.toThrow()
+    })
   })
 })
